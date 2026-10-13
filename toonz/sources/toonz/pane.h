@@ -311,6 +311,7 @@ protected:
   void paintEvent(QPaintEvent *) override;
   void enterEvent(QEvent *) override;
   void leaveEvent(QEvent *) override;
+  void keyPressEvent(QKeyEvent *) override;
 
   virtual bool isActivatableOnEnter() { return false; }
 

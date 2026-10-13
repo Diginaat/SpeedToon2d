@@ -133,6 +133,21 @@ void TPanel::onCloseButtonPressed() {
 }
 
 //-----------------------------------------------------------------------------
+/*! Escape closes a floating panel, like its title bar close button. Child
+    widgets that use Escape themselves (e.g. line edits) consume it first.
+ */
+void TPanel::keyPressEvent(QKeyEvent *event) {
+  if (isFloating() && event->key() == Qt::Key_Escape &&
+      event->modifiers() == Qt::NoModifier) {
+    hide();
+    onCloseButtonPressed();
+    event->accept();
+    return;
+  }
+  TDockWidget::keyPressEvent(event);
+}
+
+//-----------------------------------------------------------------------------
 /*! activate the panel and set focus specified widget when mouse enters
  */
 void TPanel::enterEvent(QEvent *event) {
