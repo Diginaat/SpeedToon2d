@@ -1180,7 +1180,7 @@ QRadioButton::indicator:unchecked:hover,
 QMenu::indicator:exclusive:checked,
 QRadioButton::indicator:checked,
 #CameraSettingsRadioButton_Small::indicator:checked {
-  image: url('../Medium/imgs/white/radiobutton_checked.svg');
+  image: url('../Medium/imgs/white/radiobutton-modern_checked.svg');
 }
 .RadioButton::indicator:checked:disabled,
 QMenu::indicator:exclusive:checked:disabled,
