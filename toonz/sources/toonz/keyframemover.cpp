@@ -624,10 +624,16 @@ void KeyframeMoverTool::onRelease(const CellPosition &pos) {
 
 void KeyframeMoverTool::drawCellsArea(QPainter &p) {
   if (!m_selecting) return;
-  QPen pen(Qt::DashLine);
-  pen.setColor(Qt::black);
+  // Use the theme's keyframe selection color so the rectangle is visible on
+  // dark as well as light timelines
+  QColor color = getViewer()->getSelectedKeyframeColor();
+  QColor fill  = color;
+  fill.setAlpha(40);
+  QPen pen(color, 1, Qt::DashLine);
   p.setPen(pen);
-  double endRectPosX = m_curPos.x - m_startPos.x;
-  double endRectPosY = m_curPos.y - m_startPos.y;
-  p.drawRect(m_startPos.x, m_startPos.y, endRectPosX, endRectPosY);
+  p.setBrush(fill);
+  QRectF rect(QPointF(m_startPos.x, m_startPos.y),
+              QPointF(m_curPos.x, m_curPos.y));
+  p.drawRect(rect.normalized());
+  p.setBrush(Qt::NoBrush);
 }
