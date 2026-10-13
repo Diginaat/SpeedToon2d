@@ -9,7 +9,8 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Current status
 
-- **Phase:** 1, Dark UI ([docs/phases/01-dark-ui.md](docs/phases/01-dark-ui.md)), on branch `feature/01-dark-ui`.
+- **Phase:** 2, Workspace ([docs/phases/02-workspace.md](docs/phases/02-workspace.md)), on branch `feature/02-workspace`. It is done. Phase 1 is paused and merged into dev (`5ded1b9c1`).
+- The owner asked to skip DPI and scaling checks from now on: test at 1.0 only.
 - **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is done. The step 1 rename to SpeedToon2D is done (`1017990f5`).
 - Phase 0 is merged into `dev/ui-modernization` (`896d35abe`). The test scene is deferred.
 

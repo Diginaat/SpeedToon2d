@@ -2,6 +2,14 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-13 (5): Phase 2 workspace
+
+- The owner chose Phase 2. Phase 1 is paused and merged into `dev/ui-modernization` (`5ded1b9c1`). Branch: `feature/02-workspace`.
+- Added the `Modern` room preset with an **Animation** room (`b0b810dcd`). It is data only, with no C++ change. The room format is documented in `docs/phases/02-workspace.md`.
+- Tested at 1.0 only (the owner asked to skip scaling checks): load, quit, private copy saved, and relaunch restores the layout.
+- Test profile: `CurrentRoomChoice=Modern`.
+- **Exact next action:** ask the owner whether `Modern` should become the default preset, then merge `feature/02-workspace` into dev and propose Phase 3 (docking).
+
 ## Session 2026-10-13 (4): finish 1.4
 
 - Scripted DPI tour. The capture uses PowerShell, `SendKeys` and `user32` mouse clicks. With `startupPopupEnabled=false` and `tipsPopupEnabled=false` in the test profile, the startup dialogs don't block the capture. **Do not send `Alt+F`**: it toggles viewer full screen.
