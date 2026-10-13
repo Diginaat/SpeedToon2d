@@ -225,6 +225,9 @@ public:
   void clearWasFloating() { m_wasFloating = false; }
   bool isMaximized() const { return m_maximized; }
 
+  // Moves (and if needed shrinks) a floating widget fully onto a screen.
+  void fitToScreen();
+
   // Query functions
   QWidget *hoveredWidget(QMouseEvent *me);
   DockPlaceholder *placeAdjacentTo(DockWidget *dockWidget, int boundary);
