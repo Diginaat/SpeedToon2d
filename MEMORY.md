@@ -9,9 +9,9 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Current status
 
-- **Phase:** 0, Foundation ([docs/phases/00-foundation.md](docs/phases/00-foundation.md)).
-- **State:** the build and launch are verified, and the docs are in place. The baseline test scene is missing.
-- **Next phase (1, dark UI):** waiting for owner approval.
+- **Phase:** 1, Dark UI ([docs/phases/01-dark-ui.md](docs/phases/01-dark-ui.md)), on branch `feature/01-dark-ui`.
+- **State:** 1.1 (tokens) and 1.2 (Modern theme) are done. 1.3 (icons) waits on an owner decision about the icon source and licence.
+- Phase 0 is merged into `dev/ui-modernization` (`896d35abe`). The test scene is deferred.
 
 ## Environment (verified 2026-10-13)
 
@@ -28,7 +28,9 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Completed work
 
-- Phase 0 docs, remotes and branches. Commits are on `feature/00-foundation`; see `git log dev/ui-modernization..feature/00-foundation`.
+- Phase 0: docs, remotes, branches and a verified build (merge `896d35abe`).
+- 1.1 design tokens and contrast checker (`cda0142c2`).
+- 1.2 Modern theme: `themes/Modern.less` and `qss/Modern/Modern.qss` (`3a12df2e9`).
 
 ## Active problems
 
@@ -44,11 +46,13 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Next actions
 
-1. Owner: create the baseline test scene in the GUI, following the TESTING.md spec, and run the manual checklist once.
-2. Owner: approve Phase 1. Then merge `feature/00-foundation` into `dev/ui-modernization`.
-3. Phase 1, task 1.1: define design tokens in `docs/DESIGN-SYSTEM.md`.
+1. Owner: choose the icon approach for task 1.3 (custom redraw, or an open icon set and its licence).
+2. Task 1.4: DPI review. Launch with `QT_SCALE_FACTOR=1.25/1.5/2` and take screenshots.
+3. Task 1.5: visual review of the dialogs, Preferences, schematic and function editor. This needs GUI interaction.
+4. Owner: create the baseline test scene (TESTING.md).
 
 ## Last verified state
 
 - Code baseline `3f2dde0af` (upstream, unmodified source): RelWithDebInfo build exit 0 (0 errors and 1729 warnings). The app launches.
-- Tests: automated **none exist**. Manual: launch **pass**. All other checks are **not run**.
+- `3a12df2e9` (feature/01-dark-ui): only LESS and QSS changed, so no rebuild was needed. With the Modern theme the app launches and the main window renders (**pass**). Theme switching in the Preferences dialog: **not run**.
+- Tests: automated **none exist**. Other manual checks: **not run**.

@@ -2,41 +2,41 @@
 
 _Rewrite this file at the end of every session._
 
-## Session 2026-10-13: Phase 0 foundation
+## Session 2026-10-13 (2): Phase 1 start
 
-**Requested:** Phase 0 only: inspect the repo, verify the toolchain, run a baseline build and launch, document the architecture, set up agent memory and the branch workflow, then commit and report.
+**Requested:** the owner approved Phase 1 ("go").
 
 **Completed**
 
-- Confirmed that the repo is Tahoma2D (not OpenToonz) and that HEAD `3f2dde0af` equals `tahoma2d/tahoma2d` HEAD.
-- Added remotes `upstream` (tahoma2d) and `opentoonz`. Created `dev/ui-modernization` and `feature/00-foundation`.
-- Downloaded Qt 5.15.2 WinTab, Boost 1.87 and OpenCV 4.11 into the git-ignored `thirdparty/`.
-- Configured with VS 18 and toolset v143, built RelWithDebInfo (exit 0) and launched the app (pass).
-- Wrote AGENTS, CLAUDE, MEMORY, README, CONTRIBUTING and all of `docs/` (architecture, roadmap, build, testing, design-system stub, ADRs 0001-0002, phase files 00-08).
-- Restored `LICENSE.txt` (BSD-3 requires it). Committed the owner's deletion of `AI_POLICY.md`, `CHANGELOG.md` and `.vscode/settings.json`.
+- Merged `feature/00-foundation` into `dev/ui-modernization` (`896d35abe`) and created `feature/01-dark-ui`.
+- 1.1: design tokens in `docs/DESIGN-SYSTEM.md`, plus `docs/tools/contrast.py` (11 out of 11 WCAG checks pass) (`cda0142c2`).
+- 1.2: new **Modern** theme, `stuff/config/qss/Medium/less/themes/Modern.less` compiled to `stuff/config/qss/Modern/Modern.qss` (`3a12df2e9`). It overrides variables only. No C++ changed and no other theme changed.
 
-**Incomplete**
+**Incomplete:** tasks 1.3 (icons), 1.4 (typography and DPI) and 1.5 (visual review).
 
-- Baseline test scene (Phase 0 task 17). It needs the GUI.
-- Manual regression checklist: only the launch step was run.
+**Files modified:** `docs/DESIGN-SYSTEM.md`, `docs/tools/contrast.py`, `docs/phases/{00-foundation,01-dark-ui}.md`, `docs/phases/img/01-modern-launch.png`, `docs/ROADMAP.md`, `MEMORY.md`, this file, `stuff/config/qss/Medium/less/themes/Modern.less`, `stuff/config/qss/Modern/Modern.qss`.
 
-**Files modified:** `.gitignore`, `AGENTS.md`, `CLAUDE.md`, `MEMORY.md`, `README.md`, `CONTRIBUTING.md`, `docs/**`. Deleted: `AI_POLICY.md`, `CHANGELOG.md`, `.vscode/settings.json`. **No source code changed.**
+**Branch / commit:** `feature/01-dark-ui`. Nothing has been pushed.
 
-**Branch / commit:** `feature/00-foundation`. See `git log --oneline dev/ui-modernization..feature/00-foundation`. Nothing has been pushed.
+**Commands**
 
-**Commands executed:** see [BUILD-WINDOWS.md](../BUILD-WINDOWS.md). Configure, build, deploy and run were run exactly as written there.
+```sh
+# LESS compiler (local, not in the repo)
+cd <scratch>/lessc && npm init -y && npm install less@4
+cd stuff/config/qss/Medium/less && <scratch>/lessc/node_modules/.bin/lessc themes/Modern.less ../../Modern/Modern.qss
+# Deploy the theme to the run folder and select it
+cp -r stuff/config/qss/Modern toonz/build/RelWithDebInfo/tahomastuff/config/qss/
+# then set CurrentStyleSheetName=Modern in tahomastuff/profiles/users/<user>/preferences.ini
+```
 
-**Build results:** exit 0, 0 errors, 1729 warnings (upstream noise).
+**Build results:** no C++ changed, so no rebuild was needed. The lessc compile exits 0.
 
-**Tests:** automated none (no test infrastructure exists). Manual: app launch **pass**.
-
-**Known issues:** see [phases/00-foundation.md](../phases/00-foundation.md#known-problems-found).
+**Tests:** the app launches with Modern, and the main window renders and is readable (manual, screenshot). Not run: switching theme from the Preferences dialog, dialogs, DPI scaling.
 
 **Warnings for the next agent**
 
-- Run the exe with its working directory set to `toonz/build/RelWithDebInfo`. Otherwise portable mode and `tahomastuff` are not found.
-- In Git-Bash, never pass `-- /m` to `cmake --build` (MSYS path mangling).
-- Use PowerShell for downloads, because Git-Bash `curl` is blocked here.
-- Do not push or merge to `dev/ui-modernization` without owner approval.
+- After editing `Medium.less` or `components/` or `layouts/`, recompile **all** six themes: Medium, Dark, Darker, Light, Neutral and Modern.
+- The icon-theme heuristic in `PreferencesPopup::onStyleSheetTypeChanged` checks for the substring `imgs/black` in the QSS. Keep Modern on `imgs/white`.
+- The test run folder's `preferences.ini` is set to Modern. Delete that line to go back to Dark.
 
-**Exact next action:** the owner reviews the Phase 0 report and creates the test scene. Once Phase 1 is approved, merge `feature/00-foundation` into `dev/ui-modernization`, branch `feature/01-dark-ui`, and start task 1.1 (design tokens).
+**Exact next action:** get the owner's choice of icon approach for 1.3. Meanwhile, task 1.4 can start: launch with `QT_SCALE_FACTOR` set to 1.25, 1.5 and 2, take screenshots, and look for clipped text.

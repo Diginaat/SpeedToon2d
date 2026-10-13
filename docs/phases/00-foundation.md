@@ -1,6 +1,6 @@
 # Phase 0 — Repository and development foundation
 
-- **Status:** in progress. Everything is done except the baseline test scene (task 17).
+- **Status:** done. Merged into `dev/ui-modernization` (`896d35abe`) on 2026-10-13 with owner approval. Task 17, the test scene, is deferred.
 - **Branch:** `feature/00-foundation` (cut from `dev/ui-modernization`, which was cut from `master` @ `3f2dde0af`)
 
 ## Goal

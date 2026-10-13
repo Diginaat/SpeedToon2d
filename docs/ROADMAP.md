@@ -5,8 +5,8 @@ Status values are `not started`, `in progress`, `blocked` and `done`. Only use `
 
 | # | Phase | Branch | Status | Detail |
 |---|---|---|---|---|
-| 0 | Repository and development foundation | `feature/00-foundation` | in progress | [00-foundation](phases/00-foundation.md) |
-| 1 | Modern dark UI, icons, typography | `feature/01-dark-ui` | not started | [01-dark-ui](phases/01-dark-ui.md) |
+| 0 | Repository and development foundation | `feature/00-foundation` | done (test scene deferred) | [00-foundation](phases/00-foundation.md) |
+| 1 | Modern dark UI, icons, typography | `feature/01-dark-ui` | in progress (1.1, 1.2 done) | [01-dark-ui](phases/01-dark-ui.md) |
 | 2 | Harmony-inspired workspace preset | `feature/02-workspace` | not started | [02-workspace](phases/02-workspace.md) |
 | 3 | Docking and panel management | `feature/03-docking` | not started | [03-docking](phases/03-docking.md) |
 | 4 | Horizontal timeline and keyframes | `feature/04-timeline` | not started | [04-timeline](phases/04-timeline.md) |
