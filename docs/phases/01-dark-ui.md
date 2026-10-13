@@ -18,7 +18,7 @@ Add a new, selectable dark theme with consistent icons and typography. Do not to
 
 Split each task into commits small enough to build and test on their own. Tick a task only after it has been verified.
 
-- [ ] 1.1 Define tokens in [DESIGN-SYSTEM.md](../DESIGN-SYSTEM.md).
+- [x] 1.1 Define tokens in [DESIGN-SYSTEM.md](../DESIGN-SYSTEM.md).
 - [ ] 1.2 Add `themes/<NewName>.less`, generate its QSS and make it selectable in Preferences.
 - [ ] 1.3 Audit icons, then redraw them consistently using redistributable licences only.
 - [ ] 1.4 Typography: check font sizes and clipping at 100%, 125%, 150% and 200% DPI.
