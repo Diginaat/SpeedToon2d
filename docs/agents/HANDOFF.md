@@ -2,6 +2,12 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-13 (6): Phase 3 docking start
+
+- Merged Phase 2 into dev (`2f4946b0d`). Branch: `feature/03-docking`. `Default` stays the default room preset, because the owner has not decided.
+- `DockWidget::fitToScreen()` keeps floating panels on screen (`828bc7a35`). `Esc` closes floating panels (`TPanel::keyPressEvent`). Both were tested at 1.0.
+- **Exact next action:** 3.3 reset, save and restore workspace commands, or 3.2 header and minimum-size polish.
+
 ## Session 2026-10-13 (5): Phase 2 workspace
 
 - The owner chose Phase 2. Phase 1 is paused and merged into `dev/ui-modernization` (`5ded1b9c1`). Branch: `feature/02-workspace`.

@@ -9,7 +9,7 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Current status
 
-- **Phase:** 2, Workspace ([docs/phases/02-workspace.md](docs/phases/02-workspace.md)), on branch `feature/02-workspace`. It is done. Phase 1 is paused and merged into dev (`5ded1b9c1`).
+- **Phase:** 3, Docking ([docs/phases/03-docking.md](docs/phases/03-docking.md)), on branch `feature/03-docking`. Floating panels are now kept on screen (`828bc7a35`) and `Esc` closes them. Phase 2 is done and merged (`2f4946b0d`). Phase 1 is paused.
 - The owner asked to skip DPI and scaling checks from now on: test at 1.0 only.
 - **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is done. The step 1 rename to SpeedToon2D is done (`1017990f5`).
 - Phase 0 is merged into `dev/ui-modernization` (`896d35abe`). The test scene is deferred.
