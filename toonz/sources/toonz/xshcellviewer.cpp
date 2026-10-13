@@ -3471,7 +3471,7 @@ void CellArea::drawKeyframe(QPainter &p, const QRect toBeUpdated) {
   const Orientation *o = m_viewer->orientation();
   int r0, r1, c0, c1;  // range of visible rows and columns
   CellRange visible    = m_viewer->xyRectToRange(toBeUpdated);
-  QColor keyFrameColor = Qt::white, outline = Qt::black;
+  QColor keyFrameColor = m_viewer->getKeyframeColor(), outline = Qt::black;
   r0 = visible.from().frame();
   r1 = visible.to().frame();
   c0 = visible.from().layer();
@@ -3572,10 +3572,10 @@ void CellArea::drawKeyframe(QPainter &p, const QRect toBeUpdated) {
         QPoint xy     = m_viewer->positionToXY(CellPosition(row, col));
         QPoint target = tmpKeyRect.translated(xy).topLeft();
 
-        QColor color  = Qt::white;
+        QColor color  = keyFrameColor;
         if (m_viewer->getKeyframeSelection() &&
             m_viewer->getKeyframeSelection()->isSelected(row, col))
-          color = QColor(85, 157, 255);
+          color = m_viewer->getSelectedKeyframeColor();
 
         int x = xy.x();
         int y = xy.y();
