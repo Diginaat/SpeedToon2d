@@ -144,6 +144,39 @@ DockWidget::~DockWidget() {
 
 //-------------------------------------
 
+//! Moves, and shrinks if it is larger than the screen, this widget so that it
+//! lies fully inside the available area of the screen showing most of it.
+//! A widget that is entirely off-screen (e.g. saved on a monitor that is no
+//! longer connected) is brought onto its current screen.
+void DockWidget::fitToScreen() {
+  QRect geom = geometry();
+
+  QScreen *target = nullptr;
+  int bestArea    = 0;
+  for (QScreen *screen : QGuiApplication::screens()) {
+    QRect visible = geom & screen->availableGeometry();
+    int area      = visible.width() * visible.height();
+    if (area > bestArea) {
+      bestArea = area;
+      target   = screen;
+    }
+  }
+  if (!target) target = screen() ? screen() : QGuiApplication::primaryScreen();
+  if (!target) return;
+
+  QRect avail = target->availableGeometry();
+  geom.setWidth(std::min(geom.width(), avail.width()));
+  geom.setHeight(std::min(geom.height(), avail.height()));
+  if (geom.right() > avail.right()) geom.moveRight(avail.right());
+  if (geom.bottom() > avail.bottom()) geom.moveBottom(avail.bottom());
+  if (geom.left() < avail.left()) geom.moveLeft(avail.left());
+  if (geom.top() < avail.top()) geom.moveTop(avail.top());
+
+  if (geom != geometry()) setGeometry(geom);
+}
+
+//-------------------------------------
+
 //! Clears dock placeholders for this dockwidget. This is automatically called
 //! at drag ends.
 void DockWidget::clearDockPlaceholders() {

@@ -1525,24 +1525,20 @@ bool DockLayout::restoreState(const State &state) {
       item->show();
     }
 
-  // Recover available geometry infos
-  // QRect availableRect= QApplication::desktop()->availableGeometry();
-  int recoverX = 0, recoverY = 0;
-
   // Deal with floating panels
   for (j = 0; j < m_items.size(); ++j) {
     item = static_cast<DockWidget *>(m_items[j]->widget());
 
-    if (item->m_saveIndex > 0) {
-      // Ensure that floating panels are not placed in
-      // unavailable positions
-      if ((geoms[j] & item->screen()->availableGeometry()).isEmpty())
-        item->move(recoverX += 50, recoverY += 50);
-
+    // Docked items were marked with -1 above
+    if (item->m_saveIndex >= 0) {
       // Set floating appearances
       item->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
       item->setFloatingAppearance();
       item->m_floating = true;
+
+      // Ensure that floating panels are fully visible, e.g. when the layout
+      // was saved on a monitor that is no longer connected
+      item->fitToScreen();
     }
   }
 

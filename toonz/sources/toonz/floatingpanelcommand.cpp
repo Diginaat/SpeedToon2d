@@ -19,11 +19,12 @@
 // mette il widget al centro dello schermo e lo fa diventare la finestra
 // corrente
 static void activateWidget(QWidget *w) {
-  QRect screenRect = w->screen()->geometry();
-
-  QPoint p((screenRect.width() - w->width()) / 2,
-           (screenRect.height() - w->height()) / 2);
-  w->setGeometry(QRect(p, w->size()));
+  // Center on the widget's own screen (its origin is not 0,0 on secondary
+  // monitors)
+  QRect geom(QPoint(), w->size());
+  geom.moveCenter(w->screen()->availableGeometry().center());
+  w->setGeometry(geom);
+  if (DockWidget *dock = dynamic_cast<DockWidget *>(w)) dock->fitToScreen();
   w->activateWindow();
 }
 
@@ -126,6 +127,7 @@ TPanel *OpenFloatingPanel::getOrOpenFloatingPanel(
         // Devo porre il pannello sotto il controllo del layout della stanza
         currentRoom->addDockWidget(panel);
         panel->show();
+        panel->fitToScreen();
         panel->raise();
         panel->activateWindow();
         return panel;
@@ -146,6 +148,7 @@ TPanel *OpenFloatingPanel::getOrOpenFloatingPanel(
   panel->activateWindow();
   if (!lastFloatingPos.isNull())
     panel->move(QPoint(lastFloatingPos.x() + 30, lastFloatingPos.y() + 30));
+  panel->fitToScreen();
 
   return panel;
 }
