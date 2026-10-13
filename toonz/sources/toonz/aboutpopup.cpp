@@ -23,11 +23,11 @@ void AboutClickableLabel::mousePressEvent(QMouseEvent* event) {
 }
 
 AboutPopup::AboutPopup(QWidget* parent)
-    : DVGui::Dialog(parent, true, true, "About Tahoma2D") {
+    : DVGui::Dialog(parent, true, true, "About SpeedToon2D") {
   setFixedWidth(360);
   setFixedHeight(383);
 
-  setWindowTitle(tr("About Tahoma2D"));
+  setWindowTitle(tr("About SpeedToon2D"));
   setTopMargin(0);
 
   TFilePath baseLicensePath   = TEnv::getStuffDir() + "doc/LICENSE";
@@ -79,7 +79,7 @@ AboutPopup::AboutPopup(QWidget* parent)
 
   QLabel* ffmpegLabel = new QLabel(this);
   ffmpegLabel->setText(tr(
-      "Tahoma2D ships with FFmpeg.\nFFmpeg is licensed under the LGPLv2.1"));
+      "SpeedToon2D ships with FFmpeg.\nFFmpeg is licensed under the LGPLv2.1"));
   mainLayout->addWidget(ffmpegLabel);
 
   mainLayout->addSpacerItem(new QSpacerItem(this->width(), 10));

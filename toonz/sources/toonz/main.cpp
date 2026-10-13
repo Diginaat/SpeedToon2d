@@ -100,8 +100,8 @@ using namespace DVGui;
 
 TEnv::IntVar EnvSoftwareCurrentFontSize("SoftwareCurrentFontSize", 12);
 
-const char *rootVarName     = "TAHOMA2DROOT";
-const char *systemVarPrefix = "TAHOMA2D";
+const char *rootVarName     = "SPEEDTOON2DROOT";
+const char *systemVarPrefix = "SPEEDTOON2D";
 
 #ifdef MACOSX
 #include "tthread.h"
@@ -134,7 +134,7 @@ static void toonzRunOutOfContMemHandler(unsigned long size) {
 #ifdef _WIN32
   static bool firstTime = true;
   if (firstTime) {
-    MessageBox(NULL, (LPCWSTR)L"Run out of contiguous physical memory: please save all and restart Tahoma2D!",
+    MessageBox(NULL, (LPCWSTR)L"Run out of contiguous physical memory: please save all and restart SpeedToon2D!",
 				   (LPCWSTR)L"Warning", MB_OK | MB_SYSTEMMODAL);
     firstTime = false;
   }
@@ -168,7 +168,7 @@ static void initToonzEnv(QHash<QString, QString> &argPathValues) {
     ++i;
   }
 
-  QCoreApplication::setOrganizationName("Tahoma2D");
+  QCoreApplication::setOrganizationName("SpeedToon2D");
   QCoreApplication::setOrganizationDomain("");
   QCoreApplication::setApplicationName(
       QString::fromStdString(TEnv::getApplicationName()));
@@ -664,7 +664,7 @@ int main(int argc, char *argv[]) {
 
   loadShaderInterfaces(ToonzFolder::getLibraryFolder() + TFilePath("shaders"));
 
-  splash.showMessage(offsetStr + QObject::tr("Initializing Tahoma2D..."),
+  splash.showMessage(offsetStr + QObject::tr("Initializing SpeedToon2D..."),
                      Qt::AlignRight | Qt::AlignBottom, Qt::black);
   a.processEvents();
 
@@ -784,7 +784,7 @@ int main(int argc, char *argv[]) {
 
   w.setWindowTitle(QString::fromStdString(TEnv::getApplicationFullName()));
   if (TEnv::getIsPortable()) {
-    splash.showMessage(offsetStr + QObject::tr("Starting Tahoma2D..."),
+    splash.showMessage(offsetStr + QObject::tr("Starting SpeedToon2D..."),
                        Qt::AlignRight | Qt::AlignBottom, Qt::black);
   } else {
     splash.showMessage(offsetStr + QObject::tr("Starting main window..."),

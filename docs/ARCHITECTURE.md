@@ -1,9 +1,9 @@
 # Architecture
 
-How the SpeedToon2d source tree is organised, and where each modernization phase will touch it.
+How the SpeedToon2D source tree is organised, and where each modernization phase will touch it.
 Every path is relative to the repository root and was checked against commit `3f2dde0af`, the Tahoma2D upstream HEAD.
 
-> SpeedToon2d is a fork of **Tahoma2D** (version 1.6). Tahoma2D is itself a fork of **OpenToonz**.
+> SpeedToon2D is a fork of **Tahoma2D** (version 1.6). Tahoma2D is itself a fork of **OpenToonz**.
 > Most OpenToonz documentation still applies, but class names, folder names (`tahomastuff`) and
 > some features (folder columns, the Medium LESS theme) are Tahoma2D-specific.
 

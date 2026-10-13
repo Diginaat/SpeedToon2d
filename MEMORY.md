@@ -4,7 +4,7 @@ Keep this file short and factual. Put detail in `docs/`. Update it whenever the 
 
 ## Project identity
 
-SpeedToon2d is a fork of Tahoma2D 1.6.3, which is itself based on OpenToonz. It is being modernised into a Harmony-inspired 2D animation tool, one verified phase at a time.
+SpeedToon2D is a fork of Tahoma2D 1.6.3, which is itself based on OpenToonz. It is being modernised into a Harmony-inspired 2D animation tool, one verified phase at a time.
 Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGENTS.md).
 
 ## Current status
@@ -41,6 +41,7 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 ## Important decisions
 
 - [ADR 0001](docs/decisions/0001-ui-architecture.md): extend the existing Qt 5 widgets, LESS themes and docking. No framework swap.
+- [ADR 0003](docs/decisions/0003-rename-to-speedtoon2d.md): the app identity is now `SpeedToon2D` (registry, env vars `SPEEDTOON2D*`, titles). The exe and branding renames are still to do.
 - [ADR 0002](docs/decisions/0002-branch-and-upstream-strategy.md): `upstream` = tahoma2d, `opentoonz` = reference remote. Never commit to `master`.
 - The owner removed Tahoma2D's `AI_POLICY.md`, `CHANGELOG.md` and `.vscode/settings.json` from the fork, along with the restrictive `AGENTS.md` and `CLAUDE.md`, which were replaced.
 

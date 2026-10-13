@@ -56,15 +56,15 @@ TFilePathSet ToonzFolder::getProjectsFolders() {
                     TEnv::getSystemPathMap().at("PROJECTS"));
   }
   if (documents) {
-    fps.push_back(getMyDocumentsPath() + "Tahoma2D");
-    if (!TSystem::doesExistFileOrLevel(getMyDocumentsPath() + "Tahoma2D")) {
-      TSystem::mkDir(getMyDocumentsPath() + "Tahoma2D");
+    fps.push_back(getMyDocumentsPath() + "SpeedToon2D");
+    if (!TSystem::doesExistFileOrLevel(getMyDocumentsPath() + "SpeedToon2D")) {
+      TSystem::mkDir(getMyDocumentsPath() + "SpeedToon2D");
     }
   }
   if (desktop) {
-    fps.push_back(getDesktopPath() + "Tahoma2D");
-    if (!TSystem::doesExistFileOrLevel(getDesktopPath() + "Tahoma2D")) {
-      TSystem::mkDir(getDesktopPath() + "Tahoma2D");
+    fps.push_back(getDesktopPath() + "SpeedToon2D");
+    if (!TSystem::doesExistFileOrLevel(getDesktopPath() + "SpeedToon2D")) {
+      TSystem::mkDir(getDesktopPath() + "SpeedToon2D");
     }
   }
   if (custom) {

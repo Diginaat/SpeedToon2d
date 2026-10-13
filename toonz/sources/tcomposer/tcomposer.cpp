@@ -113,8 +113,8 @@ namespace {
 //   (es <systemVarPrefix>PROJECTS etc.)
 //
 
-const char *rootVarName     = "TAHOMA2DROOT";
-const char *systemVarPrefix = "TAHOMA2D";
+const char *rootVarName     = "SPEEDTOON2DROOT";
+const char *systemVarPrefix = "SPEEDTOON2D";
 
 // TODO: forse anche questo andrebbe in tnzbase
 // ci possono essere altri programmi offline oltre al tcomposer
@@ -704,7 +704,7 @@ int main(int argc, char *argv[]) {
   TEnv::setSystemVarPrefix(systemVarPrefix);
   TEnv::setApplicationFileName(argv[0]);
 
-  QCoreApplication::setOrganizationName("Tahoma2D");
+  QCoreApplication::setOrganizationName("SpeedToon2D");
   QCoreApplication::setOrganizationDomain("");
   QCoreApplication::setApplicationName(
       QString::fromStdString(TEnv::getApplicationName()));

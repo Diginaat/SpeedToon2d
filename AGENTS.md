@@ -5,7 +5,7 @@ Read it fully before you change anything.
 
 ## Mission
 
-SpeedToon2d is a fork of **Tahoma2D** (and so of OpenToonz). It is being modernised into a Toon Boom Harmony-inspired 2D animation tool.
+SpeedToon2D is a fork of **Tahoma2D** (and so of OpenToonz). It is being modernised into a Toon Boom Harmony-inspired 2D animation tool.
 The work improves usability (theme, workspace, docking, timeline, hierarchy, node editor, rigging, deformers) and keeps existing scenes compatible.
 Take inspiration from proprietary software, but never copy its code, icons, artwork or trademarks.
 

@@ -19,7 +19,7 @@
 //=============================================================================
 /*! \class TipsPopup
                 \brief The TipsPopup class provides a dialog to
-   bring up Tahoma2D tips
+   bring up SpeedToon2D tips
 
                 Inherits \b Dialog.
 */
@@ -28,7 +28,7 @@
 TipsPopup::TipsPopup()
     : DVGui::Dialog(TApp::instance()->getMainWindow(), true, false,
                     "TipsPopup") {
-  setWindowTitle(tr("Tahoma2D Tips"));
+  setWindowTitle(tr("SpeedToon2D Tips"));
   setObjectName("TipsPopup");
   setModal(false);
 

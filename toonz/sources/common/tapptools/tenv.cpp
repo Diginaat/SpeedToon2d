@@ -181,8 +181,11 @@ public:
     m_moduleName  = m_version.getAppName();
     m_rootVarName = toUpper(m_version.getAppName()) + "ROOT";
 #ifdef _WIN32
-    // from v1.3, registry root is moved to SOFTWARE\\Tahoma\\Tahoma
-    m_registryRoot = TFilePath("SOFTWARE\\Tahoma2D\\") + m_version.getAppName();
+    // Registry root is SOFTWARE\\<AppName>\\<AppName>, so SpeedToon2D never
+    // shares registry settings with an installed Tahoma2D.
+    m_registryRoot =
+        TFilePath("SOFTWARE\\" + m_version.getAppName() + "\\") +
+        m_version.getAppName();
 #endif
     m_systemVarPrefix = toUpper(m_version.getAppName());
     updateEnvFile();
