@@ -2,6 +2,13 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-14 (7): Phase 4 timeline start
+
+- The owner said "go to phase 4". Phase 3 is paused and merged (`de1de51b6`). Branch: `feature/04-timeline`.
+- 4.1 data-flow table and 4.2a themeable keyframe colours (`b7823b59c`). See `docs/phases/04-timeline.md`.
+- **Test trick:** in the Modern Animation room at 1.0, click the viewer's diamond button at (347,728) to set a key on Col1 at frame 1. The key icon is then at (355,860) in the timeline.
+- **Exact next action:** 4.2b, the next appearance item: playhead and current-frame highlight, or keyframe glyph size and contrast. Alternatively, 4.3 box selection of keyframes, after checking what already exists.
+
 ## Session 2026-10-13 (6): Phase 3 docking start
 
 - Merged Phase 2 into dev (`2f4946b0d`). Branch: `feature/03-docking`. `Default` stays the default room preset, because the owner has not decided.
