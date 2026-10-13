@@ -20,7 +20,7 @@ Split each task into commits small enough to build and test on their own. Tick a
 
 - [x] 4.1 Document the data flow: exposures compared with keyframes, selection, undo.
 - [ ] 4.2 Appearance: ruler, keyframe glyphs, selection, row spacing, grid contrast, zoom and playhead.
-- [ ] 4.3 Keyframe interactions: multi-select, box select, move, copy and paste, keyboard navigation, context menus.
+- [ ] 4.3 (in progress) Keyframe interactions: multi-select, box select, move, copy and paste, keyboard navigation, context menus.
 - [ ] 4.4 Playback: scrubbing, frame range display, onion-skin visibility.
 - [ ] 4.5 Performance: measure painting on a large scene before and after.
 
@@ -50,6 +50,19 @@ There are two different kinds of timeline data. Never mix them up:
 - The defaults equal the old values, so each existing theme's QSS gains only those two lines with identical colours. Modern uses `@modern-accent-line` for selected keyframes.
 - **Test (1.0, Modern):** the viewer's diamond button set a key on Col1 at frame 1, which showed as a white diamond ([img](img/04-key-unselected.png)). Clicking it selected it, and it turned blue `#4a8fe7` ([img](img/04-key-selected.png)).
 - **Not tested:** the ease handles. They need a two-key segment with easing.
+
+### 4.3 Keyframe interactions: what already exists
+- **Selection:** click selects a key. Ctrl+click toggles and Shift+click extends (`KeyframeMoverTool::onClick`, `keyframemover.cpp`).
+- **Box selection:** press on an unselected key and drag (`rectSelect`). It only starts *on a key*; pressing on empty space selects cells instead.
+- **Moving:** drag a selected key to move it. Ctrl copies, Shift inserts and Alt overwrites (`KeyframeMover` qualifiers). Undo is `UndoMoveKeyFrame`.
+- **Ease handles:** drag the triangles (`makeKeyFrameHandleMoverTool`).
+- **Combined cell and key selection:** Alt+drag on cells, or Ctrl+drag with drag bars enabled (`TCellKeyframeSelection`).
+- **Navigation:** Next/Previous Key on Ctrl+. and Ctrl+, (`MI_NextKeyframe`, `MI_PrevKeyframe`). The context menu includes invert selection, among other options.
+
+### 4.3a Visible box selection (`feat(timeline): make the keyframe box selection visible`)
+- `KeyframeMoverTool::drawCellsArea` drew a black dashed rectangle, which was almost invisible on dark timelines. It now uses `SelectedKeyframeColor` with a 40/255 fill, and the rectangle is normalised.
+- **Test (1.0, Modern):** set a key, press on it, then drag right across frames 1-5. A blue dashed box with a light fill is visible ([img](img/04-key-box-select.png)).
+- **Possible follow-up:** start a box selection from empty space in the key strip, as in Harmony. This conflicts with cell selection in the same area, so it needs a design decision, for example a modifier key.
 
 ### Still hard-coded in `drawKeyframe` (candidates for later)
 - The keyframe outline (`Qt::black`).
