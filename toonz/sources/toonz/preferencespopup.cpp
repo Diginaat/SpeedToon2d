@@ -1307,8 +1307,8 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
       {autosavePeriod, tr("Interval (Minutes):")},
       {autosaveSceneEnabled, tr("Automatically Save the Scene File")},
       {autosaveOtherFilesEnabled, tr("Automatically Save Non-Scene Files")},
-      {startupPopupEnabled, tr("Show Startup Window when Tahoma2D Starts")},
-      {tipsPopupEnabled, tr("Show Tips Window when Tahoma2D Starts")},
+      {startupPopupEnabled, tr("Show Startup Window when SpeedToon2D Starts")},
+      {tipsPopupEnabled, tr("Show Tips Window when SpeedToon2D Starts")},
       {undoMemorySize, tr("Undo Memory Size (MB):")},
       {taskchunksize, tr("Render Task Chunk Size:")},
       {replaceAfterSaveLevelAs,
@@ -1458,7 +1458,7 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
       {inputCellsWithoutDoubleClickingEnabled,
        tr("Enable to Input Cells without Double Clicking")},
       {shortcutCommandsWhileRenamingCellEnabled,
-       tr("Enable Tahoma2D Commands' Shortcut Keys While Renaming Cell")},
+       tr("Enable SpeedToon2D Commands' Shortcut Keys While Renaming Cell")},
       {showQuickToolbar, tr("Show Quick Toolbar")},
       {showXsheetBreadcrumbs, tr("Show Sub-Scene Navigation Bar")},
       {expandFunctionHeader, tr("Expand Function Editor Header to Match Xsheet Header Height*")},
@@ -1752,7 +1752,7 @@ PreferencesPopup::PreferencesPopup()
   m_preferenceScrollArea->setWidget(preferencesFrame);
 
   QLabel* note = new QLabel(
-      tr("* Changes will take effect the next time you run Tahoma2D"));
+      tr("* Changes will take effect the next time you run SpeedToon2D"));
   note->setStyleSheet("font-size: 12px; font: italic;");
 
   QHBoxLayout* mainLayout = new QHBoxLayout();
@@ -2167,8 +2167,8 @@ QGridLayout* PreferencesPopup::createImportExportLayout() {
 
   QGridLayout* lay = new QGridLayout();
   setupLayout(lay);
-  putLabel(tr("External applications used by Tahoma2D.\nThese come bundled "
-              "with Tahoma2D, but you can set path to a different version."),
+  putLabel(tr("External applications used by SpeedToon2D.\nThese come bundled "
+              "with SpeedToon2D, but you can set path to a different version."),
            lay);
 
   QGridLayout* ffmpegOptionsLay = insertGroupBox(tr("FFmpeg"), lay);

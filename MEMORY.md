@@ -4,14 +4,14 @@ Keep this file short and factual. Put detail in `docs/`. Update it whenever the 
 
 ## Project identity
 
-SpeedToon2d is a fork of Tahoma2D 1.6.3, which is itself based on OpenToonz. It is being modernised into a Harmony-inspired 2D animation tool, one verified phase at a time.
+SpeedToon2D is a fork of Tahoma2D 1.6.3, which is itself based on OpenToonz. It is being modernised into a Harmony-inspired 2D animation tool, one verified phase at a time.
 Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGENTS.md).
 
 ## Current status
 
-- **Phase:** 0, Foundation ([docs/phases/00-foundation.md](docs/phases/00-foundation.md)).
-- **State:** the build and launch are verified, and the docs are in place. The baseline test scene is missing.
-- **Next phase (1, dark UI):** waiting for owner approval.
+- **Phase:** 1, Dark UI ([docs/phases/01-dark-ui.md](docs/phases/01-dark-ui.md)), on branch `feature/01-dark-ui`.
+- **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is done. The step 1 rename to SpeedToon2D is done (`1017990f5`).
+- Phase 0 is merged into `dev/ui-modernization` (`896d35abe`). The test scene is deferred.
 
 ## Environment (verified 2026-10-13)
 
@@ -28,7 +28,11 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Completed work
 
-- Phase 0 docs, remotes and branches. Commits are on `feature/00-foundation`; see `git log dev/ui-modernization..feature/00-foundation`.
+- Phase 0: docs, remotes, branches and a verified build (merge `896d35abe`).
+- 1.1 design tokens and contrast checker (`cda0142c2`).
+- 1.2 Modern theme: `themes/Modern.less` and `qss/Modern/Modern.qss` (`3a12df2e9`).
+- 1.4: panel titles are elided before the title-bar buttons (`5b991a955`), menu labels no longer touch their shortcuts (`2ae1a30d2`), and Modern radio buttons are blue (`5210bc18f`).
+- Rename to SpeedToon2D, step 1 (`1017990f5`). Full build passes, and the window title is "SpeedToon2D 1.6.3".
 
 ## Active problems
 
@@ -39,16 +43,19 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 ## Important decisions
 
 - [ADR 0001](docs/decisions/0001-ui-architecture.md): extend the existing Qt 5 widgets, LESS themes and docking. No framework swap.
+- [ADR 0003](docs/decisions/0003-rename-to-speedtoon2d.md): the app identity is now `SpeedToon2D` (registry, env vars `SPEEDTOON2D*`, titles). The exe and branding renames are still to do.
 - [ADR 0002](docs/decisions/0002-branch-and-upstream-strategy.md): `upstream` = tahoma2d, `opentoonz` = reference remote. Never commit to `master`.
 - The owner removed Tahoma2D's `AI_POLICY.md`, `CHANGELOG.md` and `.vscode/settings.json` from the fork, along with the restrictive `AGENTS.md` and `CLAUDE.md`, which were replaced.
 
 ## Next actions
 
-1. Owner: create the baseline test scene in the GUI, following the TESTING.md spec, and run the manual checklist once.
-2. Owner: approve Phase 1. Then merge `feature/00-foundation` into `dev/ui-modernization`.
-3. Phase 1, task 1.1: define design tokens in `docs/DESIGN-SYSTEM.md`.
+1. Rename step 2: CMake target and exe `SpeedToon2D.exe`, xdg and macOS packaging (ADR 0003).
+2. Task 1.5: visual review of the dialogs, schematic and function editor. The scripted capture approach is described in the 1.4 log.
+3. Task 1.5: visual review of the dialogs, Preferences, schematic and function editor. This needs GUI interaction.
+4. Owner: create the baseline test scene (TESTING.md).
 
 ## Last verified state
 
 - Code baseline `3f2dde0af` (upstream, unmodified source): RelWithDebInfo build exit 0 (0 errors and 1729 warnings). The app launches.
-- Tests: automated **none exist**. Manual: launch **pass**. All other checks are **not run**.
+- `3a12df2e9` (feature/01-dark-ui): only LESS and QSS changed, so no rebuild was needed. With the Modern theme the app launches and the main window renders (**pass**). Theme switching in the Preferences dialog: **not run**.
+- Tests: automated **none exist**. Other manual checks: **not run**.

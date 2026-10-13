@@ -88,6 +88,9 @@
 #include <QLibraryInfo>
 #include <QHash>
 #include <QPainterPath>
+#include <QMenu>
+#include <QScreen>
+#include <QStyle>
 
 #ifdef _WIN32
 #ifndef x64
@@ -100,8 +103,8 @@ using namespace DVGui;
 
 TEnv::IntVar EnvSoftwareCurrentFontSize("SoftwareCurrentFontSize", 12);
 
-const char *rootVarName     = "TAHOMA2DROOT";
-const char *systemVarPrefix = "TAHOMA2D";
+const char *rootVarName     = "SPEEDTOON2DROOT";
+const char *systemVarPrefix = "SPEEDTOON2D";
 
 #ifdef MACOSX
 #include "tthread.h"
@@ -111,6 +114,52 @@ void qt_mac_set_menubar_merge(bool enable);
 
 // Modifica per toonz (non servono questo tipo di licenze)
 #define NO_LICENSE
+//-----------------------------------------------------------------------------
+
+// With a style sheet, Qt 5.15 sizes a menu item without an icon as
+// "label + 12px" but draws its label after the full icon column, so the label
+// runs into the shortcut column. Widening the menu by one icon column when it
+// is shown restores the gap (QMenu lays items out using minimumWidth()).
+class MenuShortcutGapFilter final : public QObject {
+public:
+  using QObject::QObject;
+
+  bool eventFilter(QObject *obj, QEvent *e) override {
+    if (e->type() != QEvent::Show && e->type() != QEvent::Hide) return false;
+    QMenu *menu = qobject_cast<QMenu *>(obj);
+    if (!menu) return false;
+
+    if (e->type() == QEvent::Hide) {
+      menu->setMinimumWidth(0);
+      return false;
+    }
+    if (!hasShortcut(menu)) return false;
+
+    int iconColumn =
+        menu->style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, menu) +
+        4;
+    int width = menu->width() + iconColumn;
+    menu->setMinimumWidth(width);
+    menu->resize(width, menu->height());
+
+    // Keep the widened menu on screen.
+    QScreen *screen = menu->screen();
+    if (screen) {
+      int overflow =
+          menu->geometry().right() - screen->availableGeometry().right();
+      if (overflow > 0) menu->move(menu->x() - overflow, menu->y());
+    }
+    return false;
+  }
+
+private:
+  static bool hasShortcut(const QMenu *menu) {
+    for (const QAction *action : menu->actions())
+      if (action->isVisible() && !action->shortcut().isEmpty()) return true;
+    return false;
+  }
+};
+
 //-----------------------------------------------------------------------------
 
 static void fatalError(QString msg) {
@@ -134,7 +183,7 @@ static void toonzRunOutOfContMemHandler(unsigned long size) {
 #ifdef _WIN32
   static bool firstTime = true;
   if (firstTime) {
-    MessageBox(NULL, (LPCWSTR)L"Run out of contiguous physical memory: please save all and restart Tahoma2D!",
+    MessageBox(NULL, (LPCWSTR)L"Run out of contiguous physical memory: please save all and restart SpeedToon2D!",
 				   (LPCWSTR)L"Warning", MB_OK | MB_SYSTEMMODAL);
     firstTime = false;
   }
@@ -168,7 +217,7 @@ static void initToonzEnv(QHash<QString, QString> &argPathValues) {
     ++i;
   }
 
-  QCoreApplication::setOrganizationName("Tahoma2D");
+  QCoreApplication::setOrganizationName("SpeedToon2D");
   QCoreApplication::setOrganizationDomain("");
   QCoreApplication::setApplicationName(
       QString::fromStdString(TEnv::getApplicationName()));
@@ -369,6 +418,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   QApplication a(argc, argv);
+  a.installEventFilter(new MenuShortcutGapFilter(&a));
 
 #ifdef MACOSX
   // This workaround is to avoid missing left button problem on Qt5.6.0.
@@ -664,7 +714,7 @@ int main(int argc, char *argv[]) {
 
   loadShaderInterfaces(ToonzFolder::getLibraryFolder() + TFilePath("shaders"));
 
-  splash.showMessage(offsetStr + QObject::tr("Initializing Tahoma2D..."),
+  splash.showMessage(offsetStr + QObject::tr("Initializing SpeedToon2D..."),
                      Qt::AlignRight | Qt::AlignBottom, Qt::black);
   a.processEvents();
 
@@ -784,7 +834,7 @@ int main(int argc, char *argv[]) {
 
   w.setWindowTitle(QString::fromStdString(TEnv::getApplicationFullName()));
   if (TEnv::getIsPortable()) {
-    splash.showMessage(offsetStr + QObject::tr("Starting Tahoma2D..."),
+    splash.showMessage(offsetStr + QObject::tr("Starting SpeedToon2D..."),
                        Qt::AlignRight | Qt::AlignBottom, Qt::black);
   } else {
     splash.showMessage(offsetStr + QObject::tr("Starting main window..."),

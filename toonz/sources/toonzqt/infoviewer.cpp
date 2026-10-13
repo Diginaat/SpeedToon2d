@@ -272,11 +272,11 @@ QString InfoViewerImp::getTypeString() {
   else if (ext == "mov" || ext == "avi" || ext == "3gp")
     return "Movie File";
   else if (ext == "tnz")
-    return "Tahoma2D Scene";
+    return "SpeedToon2D Scene";
   else if (ext == "tab")
     return "Tab Scene";
   else if (ext == "plt")
-    return "Tahoma2D Palette";
+    return "SpeedToon2D Palette";
   else if (ext == "wav" || ext == "aiff" || ext == "aif" || ext == "raw" ||
            ext == "mp3" || ext == "ogg" || ext == "flac")
     return "Audio File";

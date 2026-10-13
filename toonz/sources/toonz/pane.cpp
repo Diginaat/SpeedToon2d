@@ -707,8 +707,15 @@ void TPanelTitleBar::paintEvent(QPaintEvent *) {
   }
 
   if (dw->getOrientation() == TDockWidget::vertical) {
+    // Stop the title before the first title bar button so they never overlap
+    // (e.g. the viewer title at high DPI scaling).
+    int textRight = rect.width() - 50;
+    for (const auto &button : m_buttons) {
+      if (button.second->isVisible())
+        textRight = std::min(textRight, button.second->x() - 4);
+    }
     QString titleText = painter.fontMetrics().elidedText(
-        dw->windowTitle(), Qt::ElideRight, rect.width() - 50);
+        dw->windowTitle(), Qt::ElideRight, std::max(0, textRight - 8));
 
     painter.setBrush(Qt::NoBrush);
     painter.setPen(isPanelActive ? m_activeTitleColor : m_titleColor);

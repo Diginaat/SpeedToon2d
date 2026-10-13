@@ -1043,12 +1043,12 @@ QPixmap DvDirModelNetworkNode::getPixmap(bool isOpen) const {
 
 //=============================================================================
 //
-// DvDirModelStuffFolderNode [Tahoma2D]
+// DvDirModelStuffFolderNode [SpeedToon2D]
 //
 //-----------------------------------------------------------------------------
 
 DvDirModelStuffFolderNode::DvDirModelStuffFolderNode(DvDirModelNode *parent)
-    : DvDirModelNode(parent, L"Tahoma2D") {
+    : DvDirModelNode(parent, L"SpeedToon2D") {
   m_nodeType = "StuffFolder";
 }
 
