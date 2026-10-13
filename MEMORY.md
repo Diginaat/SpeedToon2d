@@ -10,7 +10,7 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 ## Current status
 
 - **Phase:** 1, Dark UI ([docs/phases/01-dark-ui.md](docs/phases/01-dark-ui.md)), on branch `feature/01-dark-ui`.
-- **State:** 1.1 (tokens) and 1.2 (Modern theme) are done. 1.3 (icons) waits on an owner decision about the icon source and licence.
+- **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is partial: the title-elision fix is in `5b991a955`. The step 1 rename to SpeedToon2D is done (`1017990f5`).
 - Phase 0 is merged into `dev/ui-modernization` (`896d35abe`). The test scene is deferred.
 
 ## Environment (verified 2026-10-13)
@@ -31,6 +31,8 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 - Phase 0: docs, remotes, branches and a verified build (merge `896d35abe`).
 - 1.1 design tokens and contrast checker (`cda0142c2`).
 - 1.2 Modern theme: `themes/Modern.less` and `qss/Modern/Modern.qss` (`3a12df2e9`).
+- 1.4 (partial): panel titles are elided before the title-bar buttons (`5b991a955`).
+- Rename to SpeedToon2D, step 1 (`1017990f5`). Full build passes, and the window title is "SpeedToon2D 1.6.3".
 
 ## Active problems
 
@@ -47,8 +49,8 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Next actions
 
-1. Owner: choose the icon approach for task 1.3 (custom redraw, or an open icon set and its licence).
-2. Task 1.4: DPI review. Launch with `QT_SCALE_FACTOR=1.25/1.5/2` and take screenshots.
+1. Rename step 2: CMake target and exe `SpeedToon2D.exe`, xdg and macOS packaging (ADR 0003).
+2. Task 1.4, remainder: menus, dialogs and the font-size pass at 1.5 and 2.0. Check the startup dialog at 1.5 and above.
 3. Task 1.5: visual review of the dialogs, Preferences, schematic and function editor. This needs GUI interaction.
 4. Owner: create the baseline test scene (TESTING.md).
 

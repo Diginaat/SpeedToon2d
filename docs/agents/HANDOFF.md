@@ -2,6 +2,17 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-13 (3): DPI fix and rename
+
+- The owner deferred icons (1.3). The audit findings are in `docs/phases/01-dark-ui.md`.
+- 1.4 DPI review using `QT_SCALE_FACTOR`. Fixed the title overlap (`5b991a955`, `toonz/sources/toonz/pane.cpp`).
+- Renamed the app to **SpeedToon2D**, step 1 (`1017990f5`, [ADR 0003](../decisions/0003-rename-to-speedtoon2d.md)). Full build exit 0. Launch verified with the window title "SpeedToon2D 1.6.3".
+- **Warning:** the exe is still `Tahoma2D.exe` (step 2), and the startup logo is still Tahoma artwork (step 3).
+- **Exact next action:** rename step 2 (the CMake target and exe), or continue 1.4, whichever the owner prefers.
+
+---
+
+
 ## Session 2026-10-13 (2): Phase 1 start
 
 **Requested:** the owner approved Phase 1 ("go").
