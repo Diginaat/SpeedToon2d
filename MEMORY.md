@@ -9,7 +9,7 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Current status
 
-- **Phase:** 4, Timeline ([docs/phases/04-timeline.md](docs/phases/04-timeline.md)), on branch `feature/04-timeline`. 4.1 (data flow) is done, and 4.2a (themeable keyframe colours, `b7823b59c`) is done.
+- **Phase:** 4, Timeline ([docs/phases/04-timeline.md](docs/phases/04-timeline.md)), on branch `feature/04-timeline`. 4.1 (data flow), 4.2a (themeable keyframe colours, `b7823b59c`) and 4.3a (visible keyframe box selection, `e78a5f2d4`) are done.
 - Phases 1 and 3 are paused but merged into dev (`de1de51b6`). Phase 2 is done.
 - The owner asked to skip DPI and scaling checks from now on: test at 1.0 only.
 - **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is done. The step 1 rename to SpeedToon2D is done (`1017990f5`).

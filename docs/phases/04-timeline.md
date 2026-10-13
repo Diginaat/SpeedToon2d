@@ -59,7 +59,7 @@ There are two different kinds of timeline data. Never mix them up:
 - **Combined cell and key selection:** Alt+drag on cells, or Ctrl+drag with drag bars enabled (`TCellKeyframeSelection`).
 - **Navigation:** Next/Previous Key on Ctrl+. and Ctrl+, (`MI_NextKeyframe`, `MI_PrevKeyframe`). The context menu includes invert selection, among other options.
 
-### 4.3a Visible box selection (`feat(timeline): make the keyframe box selection visible`)
+### 4.3a Visible box selection (`e78a5f2d4`)
 - `KeyframeMoverTool::drawCellsArea` drew a black dashed rectangle, which was almost invisible on dark timelines. It now uses `SelectedKeyframeColor` with a 40/255 fill, and the rectangle is normalised.
 - **Test (1.0, Modern):** set a key, press on it, then drag right across frames 1-5. A blue dashed box with a light fill is visible ([img](img/04-key-box-select.png)).
 - **Possible follow-up:** start a box selection from empty space in the key strip, as in Harmony. This conflicts with cell selection in the same area, so it needs a design decision, for example a modifier key.
