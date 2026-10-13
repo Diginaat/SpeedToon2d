@@ -2,6 +2,14 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-14 (10): Phase 5 start
+
+- Owner requested: commit and push Phase 4 work, then start Phase 5.
+- `feature/04-timeline` was clean and pushed to `origin/feature/04-timeline`.
+- Merged `feature/04-timeline` into `dev/ui-modernization` as paused, pushed `origin/dev/ui-modernization`, then created `feature/05-layer-hierarchy`.
+- Phase 5 docs now mark the phase in progress. Roadmap and memory now point to Phase 5.
+- **Exact next action:** task 5.1. Document existing folder columns (`txshfoldercolumn`), column visibility/lock state, `TStageObjectTree` parenting, selection, undo and save/load before changing code.
+
 ## Session 2026-10-14 (9): Phase 4 simple-view paint optimisation
 
 - Current dirty work in `toonz/sources/toonz/xshcellviewer.cpp`: `drawLevelCell` skips text-rectangle/font setup for zoomed-out simple-view marker cells.

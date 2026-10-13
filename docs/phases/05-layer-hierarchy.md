@@ -1,6 +1,6 @@
 # Phase 5 — Layer hierarchy and folders
 
-- **Status:** not started. This phase needs owner approval before it begins.
+- **Status:** in progress (approved 2026-10-14). Phase 4 was paused to start it.
 - **Branch:** `feature/05-layer-hierarchy`
 
 ## Goal
@@ -29,4 +29,7 @@ Split each task into commits small enough to build and test on their own. Tick a
 
 ## Log
 
-_No entries yet._
+### Phase start
+- Owner requested: commit and push Phase 4 work, then start Phase 5.
+- Phase 4 was merged into `dev/ui-modernization` as paused, then this branch was cut from `dev/ui-modernization`.
+- Start with task 5.1: document existing folder columns, column state, stage-object parenting, visibility and locks before changing UI or model code.

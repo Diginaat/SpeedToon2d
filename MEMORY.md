@@ -9,7 +9,7 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Current status
 
-- **Phase:** 4, Timeline ([docs/phases/04-timeline.md](docs/phases/04-timeline.md)), on branch `feature/04-timeline`. 4.1 (data flow), 4.2a (themeable keyframe colours, `b7823b59c`), 4.3a (visible keyframe box selection, `e78a5f2d4`) and 4.5a paint timing baseline (`2d3fcd818`) are done. 4.5b simple-view paint optimisation is in progress.
+- **Phase:** 5, Layer hierarchy and folders ([docs/phases/05-layer-hierarchy.md](docs/phases/05-layer-hierarchy.md)), on branch `feature/05-layer-hierarchy`. Phase 4 was paused and merged into `dev/ui-modernization`; 4.1, 4.2a, 4.3a, 4.5a and 4.5b are done.
 - Phases 1 and 3 are paused but merged into dev (`de1de51b6`). Phase 2 is done.
 - The owner asked to skip DPI and scaling checks from now on: test at 1.0 only.
 - **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is done. The step 1 rename to SpeedToon2D is done (`1017990f5`).
@@ -51,7 +51,7 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Next actions
 
-1. Phase 4.5: commit the simple-view paint optimisation after final review, then decide whether another paint hotspot is needed.
+1. Phase 5.1: document existing folder columns, column state, stage-object parenting, visibility and locks before changing code.
 2. Rename step 2: CMake target and exe `SpeedToon2D.exe`, xdg and macOS packaging (ADR 0003).
 3. Task 1.5: visual review of the dialogs, schematic and function editor. The scripted capture approach is described in the 1.4 log.
 4. Task 1.5: visual review of the dialogs, Preferences, schematic and function editor. This needs GUI interaction.
