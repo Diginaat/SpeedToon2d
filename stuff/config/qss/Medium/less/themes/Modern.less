@@ -1,0 +1,183 @@
+// out: ../../../Modern/Modern.qss
+
+// -----------------------------------------------------------------------------
+// MODERN
+// -----------------------------------------------------------------------------
+// Graphite surfaces with a single blue accent.
+// Tokens and contrast targets: docs/DESIGN-SYSTEM.md
+// -----------------------------------------------------------------------------
+
+// Override
+@import '../Medium';
+
+// Resource Location
+@img-url: '../Medium/imgs/white';
+
+// -----------------------------------------------------------------------------
+// Tokens
+// -----------------------------------------------------------------------------
+
+@modern-canvas:         #17181b;
+@modern-sunken:         #1f2124;
+@modern-panel:          #282a2e;
+@modern-raised:         #383b40;
+@modern-hover:          #43474d;
+@modern-line:           #3a3d42;
+
+@modern-text:           #dfe1e5;
+@modern-text-secondary: #a3a8b0;
+
+@modern-accent:         #3574d4;
+@modern-accent-line:    #4a8fe7;
+@modern-warning:        #e3a33b;
+@modern-error:          #ef6b63;
+@modern-success:        #3fb950;
+
+// -----------------------------------------------------------------------------
+// Base
+// -----------------------------------------------------------------------------
+
+@bg:         @modern-panel;
+@accent:     @modern-canvas;
+@text-color: @modern-text;
+
+@hl-bg-color:           @modern-accent;
+@hl-text-color:         #fff;
+@hl-bg-color-secondary: rgba(255, 255, 255, 0.08);
+
+@dock-bg-color:              @modern-canvas;
+@dock-placeholder-color:     @modern-accent-line;
+@dialogButtonFrame-bg-color: @modern-sunken;
+
+@tooltip-bg-color:     #111214;
+@tooltip-border-color: #3d4046;
+@tooltip-text-color:   @modern-text;
+
+@label-title: lighten(@modern-accent-line, 15);
+@label-error: @modern-error;
+
+@status-hl-color: @modern-warning;
+
+// -----------------------------------------------------------------------------
+// Tabs & Rooms
+// -----------------------------------------------------------------------------
+
+@tabbar-bg-color:       @modern-sunken;
+@tab-text-color:        @modern-text-secondary;
+@tab-border-color:      @modern-canvas;
+@tab-bg-color-hover:    lighten(@modern-sunken, 5);
+@tab-text-color-hover:  @modern-text;
+
+// -----------------------------------------------------------------------------
+// Menu
+// -----------------------------------------------------------------------------
+
+@menu-bg-color:     #232529;
+@menu-border-color: @modern-line;
+
+// -----------------------------------------------------------------------------
+// Scrollbars
+// -----------------------------------------------------------------------------
+
+@scrollbar-bg-color:                 @modern-sunken;
+@scrollbar-handle-bg-color:          #3d4046;
+@scrollbar-handle-bg-color-hover:    #4b4f56;
+@scrollbar-handle-bg-color-pressed:  #5a5f67;
+
+// -----------------------------------------------------------------------------
+// Buttons
+// -----------------------------------------------------------------------------
+
+@button-bg-color:        @modern-raised;
+@button-border-color:    @modern-canvas;
+@button-text-color:      @modern-text;
+@button-bg-color-hover:  @modern-hover;
+@button-bg-color-pressed: @modern-sunken;
+@button-bg-color-disabled: lighten(@modern-panel, 3);
+
+// -----------------------------------------------------------------------------
+// Textfield & CheckBox
+// -----------------------------------------------------------------------------
+
+@input-bg-color:           #1d1f22;
+@input-border-color:       @modern-line;
+@input-border-color-focus: @modern-accent-line;
+
+@checkbox-border-color:          @input-border-color;
+@checkbox-border-color-disabled: @input-border-color-disabled;
+@checkbox-border-color-hover:    lighten(@bg, 50);
+@checkbox-border-color-checked:  @checkbox-bg-color-checked;
+
+// Dark radio buttons (same as the Dark theme)
+@radiobutton-img-unchecked:          'radiobutton-dark_unchecked.svg';
+@radiobutton-img-unchecked-hover:    'radiobutton-dark_unchecked_hover.svg';
+@radiobutton-img-unchecked-disabled: 'radiobutton-dark_unchecked_disabled.svg';
+
+// -----------------------------------------------------------------------------
+// Slider
+// -----------------------------------------------------------------------------
+
+@slider-groove-img:          'slider-groove_dark.svg';
+@slider-groove-img-disabled: 'slider-groove_disabled_dark.svg';
+@slider-groove-color:        @modern-sunken;
+
+// -----------------------------------------------------------------------------
+// Titlebars
+// -----------------------------------------------------------------------------
+
+@title-bg-color:          @modern-sunken;
+@title-text-color:        @modern-text-secondary;
+@title-text-color-active: #fff;
+
+// -----------------------------------------------------------------------------
+// File Browser / Trees
+// -----------------------------------------------------------------------------
+
+@tree-bg-color:             @modern-sunken;
+@tree-bg-color-alt:         lighten(@modern-sunken, 2);
+@prefs-tree-bg-color:       @modern-sunken;
+@browser-itemview-bg-color: @bg;
+
+// -----------------------------------------------------------------------------
+// Viewer Window
+// -----------------------------------------------------------------------------
+
+@flipmarker-img:        'flipmarker_dark.svg';
+@flipslider-img:        'flipslider_dark.svg';
+@flipslider-base-color: @modern-sunken;
+
+// -----------------------------------------------------------------------------
+// Progress Bar
+// -----------------------------------------------------------------------------
+
+@progressbar-bg-color:       @modern-sunken;
+@progressbar-chunk-bg-color: @modern-success;
+
+// -----------------------------------------------------------------------------
+// XSheet / Timeline
+// -----------------------------------------------------------------------------
+// Column-type and keyframe colors are intentionally inherited from Medium.
+
+@xsheet-LightLine-color:        rgba(0, 0, 0, 0.3);
+@xsheet-VerticalLine-color:     rgba(0, 0, 0, 0.4);
+@xsheet-bg-color:               @bg;
+@xsheet-OnionSkinAreaBG-color:  darken(@bg, 3);
+@xsheet-NotEmptyColumn-color:   @bg;
+@xsheet-PlayRange-Color:        lighten(@bg, 3);
+@xsheet-EmptyCell-color:        darken(@bg, 3);
+
+// -----------------------------------------------------------------------------
+// Function Editor
+// -----------------------------------------------------------------------------
+
+@function-panel-bg-color:           @bg;
+@function-panel-OtherCurves-color:  lighten(@function-panel-bg-color, 30);
+@function-ColumnHeaderBorder-color: @modern-line;
+@function-ColumnHeaderBG-color:     @modern-sunken;
+
+// -----------------------------------------------------------------------------
+// Schematic Viewer
+// -----------------------------------------------------------------------------
+
+@schematic-viewer-bg-color: #1e2023;
+@schematic-SelectedLinkColor: @modern-accent-line;
