@@ -21,7 +21,7 @@ Split each task into commits small enough to build and test on their own. Tick a
 - [x] 1.1 Define tokens in [DESIGN-SYSTEM.md](../DESIGN-SYSTEM.md).
 - [x] 1.2 Add `themes/<NewName>.less`, generate its QSS and make it selectable in Preferences.
 - [ ] 1.3 Icons. **Deferred by the owner on 2026-10-13.** The chosen source for later is Phosphor (MIT). The audit notes are below.
-- [ ] 1.4 (in progress) Typography: check font sizes and clipping at 100%, 125%, 150% and 200% DPI.
+- [x] 1.4 Typography: check font sizes and clipping at 100%, 125%, 150% and 200% DPI.
 - [ ] 1.5 Visual review of every main panel. Save before and after screenshots in `docs/phases/img/`.
 
 ## Acceptance criteria
@@ -53,11 +53,22 @@ The tokens are in [DESIGN-SYSTEM.md](../DESIGN-SYSTEM.md). `python docs/tools/co
 - **Colouring:** the icons are drawn in black. `ThemeManager::recolorBlackPixels` recolours every pure-black pixel to white or black according to the `iconTheme` preference. Imported icons must therefore use `#000` fills. Phosphor's `currentColor` must be replaced.
 - **Implication for Phosphor:** replacing files in `icons/dark/` would change the icons of *every* theme. To keep the other themes unchanged, add an override icon directory that is scanned before `:/icons`, for example per theme or as an "icon set" preference. That needs a small C++ change in `main.cpp` and `ThemeManager`, plus an ADR.
 
-### 1.4 DPI review (partial)
+### 1.4 DPI and typography review
 - **Method:** launch the Modern theme with `QT_SCALE_FACTOR` set to 1.25, 1.5 and 2, wait 25 s, then take a screenshot. The screen is 1920x1080. Modern overrides colours only, so the results apply to every theme.
 - **Results:**
   - 1.25: text is readable. The fixed pixel geometry in `room1.ini` leaves the timeline too short, so layer rows are cut off ([img](img/01-dpi125.png)).
   - 1.5: one timeline row is visible. The startup dialog was not visible in the capture ([img](img/01-dpi150.png)).
   - 2.0: the viewer title text overlapped the title-bar buttons ([before](img/01-dpi200-before.png)), and the timeline collapsed.
 - **Fixed:** `TPanelTitleBar::paintEvent` (`toonz/sources/toonz/pane.cpp`) now elides the title before the leftmost visible title-bar button. It used to elide at `width - 50`. At 2.0 the title now ends in "…" ([after](img/01-dpi200-after.png)). At 1.0 the full title is still shown.
-- **Open:** room layouts collapse the timeline at 1.5 and above. That belongs to Phase 2 (workspace presets) or Phase 3 (minimum sizes). Also open: the startup dialog at 1.5 and above, and a menu, dialog and font-size pass.
+- **Second pass (scripted):** `QT_SCALE_FACTOR` set to 1, 1.5 and 2. The script clicked the File, Cells and Help menus with the mouse, opened Preferences (Ctrl+U) and Render Settings (Ctrl+O), and took a screenshot of each.
+  - **Default UI font:** 12 px (`EnvSoftwareCurrentFontSize`, `main.cpp`), Segoe UI on Windows. It scales correctly with Qt high-DPI, and no text is clipped in Preferences, Render Settings or the menus.
+  - **Fixed (`2ae1a30d2`):** menu labels touched their shortcuts at every scale, for example "Create Blank DrawingAlt+D". The root cause is in Qt 5.15 `QStyleSheetStyle`: `CT_MenuItem` budgets 12 px for an icon-less item, but `CE_MenuItem` draws the label after the full `maxIconWidth` (20 px). `MenuShortcutGapFilter` in `toonz/sources/toonz/main.cpp` widens menus that show shortcuts by one icon column. See [before](img/01-menu-gap-before.png) and [after](img/01-menu-gap-after.png).
+  - **Fixed (`5210bc18f`):** the checked radio button was Tahoma magenta in Modern, because `radiobutton_checked.svg` hard-codes `#a35293`. Modern now uses `radiobutton-modern_checked.svg`, which is blue.
+  - **Not a bug:** at 2.0 the dialog captions look small. They are native Windows title bars, which `QT_SCALE_FACTOR` does not scale; real Windows display scaling does.
+- **Open issues, assigned to later phases:**
+  - Room layouts collapse the timeline at 1.5 and above. The `room*.ini` files use fixed pixel geometry (Phase 2).
+  - At 2.0 the floating Render Settings panel opens partly below the screen edge, and its Render buttons are off-screen (Phase 3, step 3.3).
+  - The default shortcut `Alt+F` is *Show/Hide Full Screen* (`V_ShowHideFullScreen`, `mainwindow.cpp`). It overrides the `&File` menu mnemonic, so the File menu cannot be opened from the keyboard (Phase 3 or 4 keyboard pass).
+  - `Esc` does not close floating panels such as Render Settings.
+  - The startup dialog was not visible in the 1.5 and 2.0 captures of the first pass. This was not re-checked, because the dialog is now disabled in the test profile.
+- **Not covered:** every other dialog and every Preferences page beyond General.

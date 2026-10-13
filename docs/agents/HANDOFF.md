@@ -2,6 +2,12 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-13 (4): finish 1.4
+
+- Scripted DPI tour. The capture uses PowerShell, `SendKeys` and `user32` mouse clicks. With `startupPopupEnabled=false` and `tipsPopupEnabled=false` in the test profile, the startup dialogs don't block the capture. **Do not send `Alt+F`**: it toggles viewer full screen.
+- Fixes: menu shortcut gap (`2ae1a30d2`, `main.cpp`) and blue radio buttons in Modern (`5210bc18f`). Full findings are in `docs/phases/01-dark-ui.md` under 1.4.
+- **Exact next action:** task 1.5, the visual review. Alternatively, rename step 2 (exe) if the owner prefers.
+
 ## Session 2026-10-13 (3): DPI fix and rename
 
 - The owner deferred icons (1.3). The audit findings are in `docs/phases/01-dark-ui.md`.
