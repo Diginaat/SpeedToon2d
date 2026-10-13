@@ -79,6 +79,9 @@
 #include <QClipboard>
 #include <QKeyEvent>
 #include <QBuffer>
+#include <QElapsedTimer>
+#include <QFile>
+#include <QTextStream>
 
 namespace {
 
@@ -3772,7 +3775,38 @@ bool CellArea::getEaseHandles(int r0, int r1, double e0, double e1, int &rh0,
 }
 
 //-----------------------------------------------------------------------------
+namespace {
+// Optional timing for timeline performance work (docs/phases/04-timeline.md,
+// task 4.5). When the environment variable SPEEDTOON2D_TIMELINE_PAINT_LOG
+// names a file, every cell area repaint appends "<microseconds> <w>x<h>".
+class PaintTimer {
+public:
+  explicit PaintTimer(const QRect &rect) : m_rect(rect) {
+    if (!logPath().isEmpty()) m_timer.start();
+  }
+  ~PaintTimer() {
+    if (!m_timer.isValid()) return;
+    qint64 micros = m_timer.nsecsElapsed() / 1000;
+    QFile file(logPath());
+    if (file.open(QIODevice::Append | QIODevice::Text))
+      QTextStream(&file) << micros << ' ' << m_rect.width() << 'x'
+                         << m_rect.height() << '\n';
+  }
+
+private:
+  static const QString &logPath() {
+    static const QString path =
+        qEnvironmentVariable("SPEEDTOON2D_TIMELINE_PAINT_LOG");
+    return path;
+  }
+  QElapsedTimer m_timer;
+  QRect m_rect;
+};
+}  // namespace
+
 void CellArea::paintEvent(QPaintEvent *event) {
+  // Declared first so it also measures the painter flush at the end
+  PaintTimer paintTimer(event->rect());
   QRect toBeUpdated = event->rect();
 
   QPainter p(this);

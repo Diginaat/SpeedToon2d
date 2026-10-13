@@ -2,6 +2,15 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-14 (8): Phase 4 paint baseline tooling
+
+- Continued Phase 4 on `feature/04-timeline`.
+- Current dirty work adds opt-in `SPEEDTOON2D_TIMELINE_PAINT_LOG` timing in `CellArea::paintEvent` and benchmark helpers in `test-scenes/tools/`.
+- Build completed: `cmake --build toonz/build --config RelWithDebInfo --parallel` rebuilt `Tahoma2D.exe`.
+- The first generated 50x2000 scene referenced missing `+drawings\perf.pli` files; the generator now writes real 1x1 raster frames and uses `perf_timeline_50x300.tnz`.
+- Baseline benchmark on `toonz/build/RelWithDebInfo/tahomastuff/sandbox/scenes/perf_timeline_50x300.tnz`: 90 full-area samples, mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms. Numbers are in `docs/phases/04-timeline.md`.
+- **Exact next action:** compare any timeline paint changes against this baseline, or commit the tooling first as 4.5a.
+
 ## Session 2026-10-14 (7): Phase 4 timeline start
 
 - The owner said "go to phase 4". Phase 3 is paused and merged (`de1de51b6`). Branch: `feature/04-timeline`.

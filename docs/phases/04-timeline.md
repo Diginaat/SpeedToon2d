@@ -22,7 +22,7 @@ Split each task into commits small enough to build and test on their own. Tick a
 - [ ] 4.2 Appearance: ruler, keyframe glyphs, selection, row spacing, grid contrast, zoom and playhead.
 - [ ] 4.3 (in progress) Keyframe interactions: multi-select, box select, move, copy and paste, keyboard navigation, context menus.
 - [ ] 4.4 Playback: scrubbing, frame range display, onion-skin visibility.
-- [ ] 4.5 Performance: measure painting on a large scene before and after.
+- [ ] 4.5 (in progress) Performance: measure painting on a large scene before and after.
 
 ## Acceptance criteria
 
@@ -68,3 +68,12 @@ There are two different kinds of timeline data. Never mix them up:
 - The keyframe outline (`Qt::black`).
 - The cycle-toggle button, drawn with white and black primitives.
 - The sound and other column painters, not yet audited.
+
+### 4.5a Timeline paint baseline tooling
+- `CellArea::paintEvent` now has opt-in paint timing behind the `SPEEDTOON2D_TIMELINE_PAINT_LOG` environment variable. When unset, it does not start the timer or write files.
+- The log format is one repaint per line: `<microseconds> <width>x<height>`.
+- Added `test-scenes/tools/make_perf_scene.toonzscript` for a large 50-column, 300-frame scene, `timeline_bench.ps1` to launch the app with logging, and `paint_stats.py` to summarise the log.
+- `timeline_bench.ps1` defaults to the current `Tahoma2D.exe` name, validates paths, supports `-IncludeLoadPaints` for scene-open repaint baselines, and supports `-StepCount` for deterministic frame-step repaint samples.
+- **Build:** `cmake --build toonz/build --config RelWithDebInfo --parallel` completed and rebuilt `Tahoma2D.exe`.
+- **Baseline (1.0, sandbox perf scene):** `timeline_bench.ps1 -StepCount 120` on `perf_timeline_50x300.tnz` wrote 90 full-cell-area repaint samples: mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms.
+- **Caveat:** `perf_timeline_50x2000.tnz` was too large for the current script path and initially produced invalid missing-level scenes; the generator now writes real 1x1 raster drawings and uses `perf_timeline_50x300.tnz`.

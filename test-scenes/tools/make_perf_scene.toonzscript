@@ -1,0 +1,29 @@
+// Generates the large timeline performance scene used in Phase 4.5.
+//
+// Run from a project folder (e.g. copy it to <stuff>/sandbox/scripts/):
+//   Tahoma2D.exe <path>\make_perf_scene.toonzscript
+// Output: <project scenes folder>/perf_timeline_50x300.tnz
+//
+// 50 raster-level columns x 300 frames, each column exposing drawings
+// 1-12 on twos with a different phase, so every column has frequent
+// exposure changes (the expensive case for cell painting). The drawings
+// are 1x1 transparent rasters: only the timeline is being measured.
+
+var columns = 50;
+var frames  = 300;
+
+var scene = new Scene();
+var image = new ImageBuilder(1, 1, "Raster").fill("transparent").image;
+for (var c = 0; c < columns; c++) {
+  var level = scene.newLevel("Raster", "perf_col_" + c + "_level");
+  for (var d = 1; d <= 12; d++) {
+    level.setFrame(d, image);
+  }
+  for (var r = 0; r < frames; r++) {
+    var drawing = (Math.floor((r + c) / 2) % 12) + 1;
+    scene.setCell(r, c, level, drawing);
+  }
+}
+scene.save("perf_timeline_50x300.tnz");
+print("saved perf_timeline_50x300.tnz: " + scene.columnCount + " columns, " +
+      scene.frameCount + " frames");
