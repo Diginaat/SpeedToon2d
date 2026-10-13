@@ -2465,27 +2465,6 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
 
   drawLoopFrameMarker(p, row, col);
 
-  QRect nameRect = o->rect(PredefinedRect::CELL_NAME).translated(QPoint(x, y));
-
-  if (Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()) {
-    TStageObject *pegbar = xsh->getStageObject(m_viewer->getObjectId(col));
-    int r0, r1;
-    if (pegbar && pegbar->getKeyframeRange(r0, r1))
-      nameRect = o->rect(PredefinedRect::CELL_NAME_WITH_KEYFRAME)
-                     .translated(QPoint(x, y));
-  }
-
-  nameRect.adjust(0, 0, -frameAdj.x(), -frameAdj.y());
-
-  if (!Preferences::instance()->isShowDragBarsEnabled()) {
-    if (o->isVerticalTimeline())
-      nameRect.adjust(-3, 0, 0, 0);
-    else if (Preferences::instance()->getTimelineLayoutPreference() == "NoDragCompact")
-      nameRect.adjust(0, -1, -0, -1);
-    else if (Preferences::instance()->getTimelineLayoutPreference() == "Roomy")
-      nameRect.adjust(0, -3, -0, -3);
-  }
-
   // draw text in red if the file does not exist
   bool isRed          = false;
   TXshSimpleLevel *sl = cell.getSimpleLevel();
@@ -2502,23 +2481,41 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
   if (isLoopedCell && row > loopR1) penColor.setAlphaF(0.4);
   p.setPen(penColor);
 
-/*
-  QString fontName = Preferences::instance()->getInterfaceFont();
-  if (fontName == "") {
-#ifdef _WIN32
-    fontName = "Arial";
-#else
-    fontName = "Helvetica";
-#endif
-  }
-  static QFont font(fontName, -1, QFont::Normal);
-  */
-  QFont font = p.font();
-  font.setPixelSize(XSHEET_FONT_PX_SIZE);
-  p.setFont(font);
-
   // do not draw frame number under RenameCellField
   if (m_renameCell->isVisible() && m_renameCell->isLocatedAt(row, col)) return;
+
+  QRect nameRect;
+  QFont font;
+  bool textLayoutReady = false;
+  auto setupTextLayout = [&]() {
+    if (textLayoutReady) return;
+    nameRect = o->rect(PredefinedRect::CELL_NAME).translated(QPoint(x, y));
+
+    if (Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()) {
+      TStageObject *pegbar = xsh->getStageObject(m_viewer->getObjectId(col));
+      int r0, r1;
+      if (pegbar && pegbar->getKeyframeRange(r0, r1))
+        nameRect = o->rect(PredefinedRect::CELL_NAME_WITH_KEYFRAME)
+                       .translated(QPoint(x, y));
+    }
+
+    nameRect.adjust(0, 0, -frameAdj.x(), -frameAdj.y());
+
+    if (!Preferences::instance()->isShowDragBarsEnabled()) {
+      if (o->isVerticalTimeline())
+        nameRect.adjust(-3, 0, 0, 0);
+      else if (Preferences::instance()->getTimelineLayoutPreference() ==
+               "NoDragCompact")
+        nameRect.adjust(0, -1, -0, -1);
+      else if (Preferences::instance()->getTimelineLayoutPreference() == "Roomy")
+        nameRect.adjust(0, -3, -0, -3);
+    }
+
+    font = p.font();
+    font.setPixelSize(XSHEET_FONT_PX_SIZE);
+    p.setFont(font);
+    textLayoutReady = true;
+  };
 
   // if the same level & same fId with the previous cell,
   // draw continue line
@@ -2561,6 +2558,8 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
       return;
     }
 
+    setupTextLayout();
+
     TFrameId fid = cell.m_frameId;
 
     // convert the last one digit of the frame number to alphabet
@@ -2599,6 +2598,8 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
        (isAfterMarkers && !isSimpleView &&
         Preferences::instance()->isLevelNameOnEachMarkerEnabled()) ||
        prevCell.getFrameId().isStopFrame())) {
+    setupTextLayout();
+
     std::wstring levelName = cell.m_level->getName();
     QString text           = QString::fromStdWString(levelName);
     QFontMetrics fm(font);

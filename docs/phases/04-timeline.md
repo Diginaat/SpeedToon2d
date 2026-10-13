@@ -73,7 +73,12 @@ There are two different kinds of timeline data. Never mix them up:
 - `CellArea::paintEvent` now has opt-in paint timing behind the `SPEEDTOON2D_TIMELINE_PAINT_LOG` environment variable. When unset, it does not start the timer or write files.
 - The log format is one repaint per line: `<microseconds> <width>x<height>`.
 - Added `test-scenes/tools/make_perf_scene.toonzscript` for a large 50-column, 300-frame scene, `timeline_bench.ps1` to launch the app with logging, and `paint_stats.py` to summarise the log.
-- `timeline_bench.ps1` defaults to the current `Tahoma2D.exe` name, validates paths, supports `-IncludeLoadPaints` for scene-open repaint baselines, and supports `-StepCount` for deterministic frame-step repaint samples.
+- `timeline_bench.ps1` defaults to the current `Tahoma2D.exe` name, validates paths, supports `-IncludeLoadPaints` for scene-open repaint baselines, supports `-StepCount` for deterministic frame-step repaint samples, and re-activates the app during step runs so key presses reach the timeline.
 - **Build:** `cmake --build toonz/build --config RelWithDebInfo --parallel` completed and rebuilt `Tahoma2D.exe`.
 - **Baseline (1.0, sandbox perf scene):** `timeline_bench.ps1 -StepCount 120` on `perf_timeline_50x300.tnz` wrote 90 full-cell-area repaint samples: mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms.
 - **Caveat:** `perf_timeline_50x2000.tnz` was too large for the current script path and initially produced invalid missing-level scenes; the generator now writes real 1x1 raster drawings and uses `perf_timeline_50x300.tnz`.
+
+### 4.5b Simple-view paint optimisation
+- `drawLevelCell` now avoids building the text rectangle and changing the painter font when a zoomed-out simple-view cell only draws the small frame marker. Level names still build the same rectangle and font before drawing text.
+- **Build:** `cmake --build toonz/build --config RelWithDebInfo --parallel` completed after closing stale benchmark processes. Existing C4251 warnings remained; no new compile errors.
+- **Benchmark (1.0, same `perf_timeline_50x300.tnz`, `-StepCount 120`):** before 90 samples, mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms; after 100 samples, mean 2.19 ms, median 2.12 ms, p95 2.71 ms, max 2.98 ms.

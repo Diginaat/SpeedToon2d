@@ -33,12 +33,16 @@ $p = Start-Process -FilePath $ExePath -ArgumentList "`"$Scene`"" `
                    -WorkingDirectory $ExeDir -PassThru
 Start-Sleep -Seconds $LoadSeconds
 $shell = New-Object -ComObject WScript.Shell
-$null = $shell.AppActivate($p.Id); Start-Sleep -Milliseconds 500
+$activated = $shell.AppActivate($p.Id)
+if (!$activated) { $activated = $shell.AppActivate('SpeedToon2D') }
+if (!$activated) { $activated = $shell.AppActivate('Tahoma2D') }
+Start-Sleep -Milliseconds 500
 if (!$IncludeLoadPaints) {
   Remove-Item $Log -ErrorAction SilentlyContinue   # ignore load-time paints
 }
 if ($StepCount -gt 0) {
   for ($i = 0; $i -lt $StepCount; $i++) {
+    if (($i % 20) -eq 0) { $null = $shell.AppActivate($p.Id) }
     [System.Windows.Forms.SendKeys]::SendWait('.') # Next frame
     Start-Sleep -Milliseconds 50
   }

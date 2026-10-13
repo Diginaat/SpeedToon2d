@@ -2,6 +2,13 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-14 (9): Phase 4 simple-view paint optimisation
+
+- Current dirty work in `toonz/sources/toonz/xshcellviewer.cpp`: `drawLevelCell` skips text-rectangle/font setup for zoomed-out simple-view marker cells.
+- Build completed after stale `Tahoma2D.exe` processes blocked linking; renamed the locked old exe to `Tahoma2D.locktest.exe`, rebuilt, then removed the renamed file.
+- Benchmark after change on `perf_timeline_50x300.tnz` with `-StepCount 120`: 100 full-area samples, mean 2.19 ms, median 2.12 ms, p95 2.71 ms, max 2.98 ms. Baseline was p95 3.04 ms.
+- **Exact next action:** review diff, optionally run one visual smoke test in the timeline, then commit this as 4.5b.
+
 ## Session 2026-10-14 (8): Phase 4 paint baseline tooling
 
 - Continued Phase 4 on `feature/04-timeline`.
