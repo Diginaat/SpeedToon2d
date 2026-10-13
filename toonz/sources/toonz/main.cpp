@@ -88,6 +88,9 @@
 #include <QLibraryInfo>
 #include <QHash>
 #include <QPainterPath>
+#include <QMenu>
+#include <QScreen>
+#include <QStyle>
 
 #ifdef _WIN32
 #ifndef x64
@@ -111,6 +114,52 @@ void qt_mac_set_menubar_merge(bool enable);
 
 // Modifica per toonz (non servono questo tipo di licenze)
 #define NO_LICENSE
+//-----------------------------------------------------------------------------
+
+// With a style sheet, Qt 5.15 sizes a menu item without an icon as
+// "label + 12px" but draws its label after the full icon column, so the label
+// runs into the shortcut column. Widening the menu by one icon column when it
+// is shown restores the gap (QMenu lays items out using minimumWidth()).
+class MenuShortcutGapFilter final : public QObject {
+public:
+  using QObject::QObject;
+
+  bool eventFilter(QObject *obj, QEvent *e) override {
+    if (e->type() != QEvent::Show && e->type() != QEvent::Hide) return false;
+    QMenu *menu = qobject_cast<QMenu *>(obj);
+    if (!menu) return false;
+
+    if (e->type() == QEvent::Hide) {
+      menu->setMinimumWidth(0);
+      return false;
+    }
+    if (!hasShortcut(menu)) return false;
+
+    int iconColumn =
+        menu->style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, menu) +
+        4;
+    int width = menu->width() + iconColumn;
+    menu->setMinimumWidth(width);
+    menu->resize(width, menu->height());
+
+    // Keep the widened menu on screen.
+    QScreen *screen = menu->screen();
+    if (screen) {
+      int overflow =
+          menu->geometry().right() - screen->availableGeometry().right();
+      if (overflow > 0) menu->move(menu->x() - overflow, menu->y());
+    }
+    return false;
+  }
+
+private:
+  static bool hasShortcut(const QMenu *menu) {
+    for (const QAction *action : menu->actions())
+      if (action->isVisible() && !action->shortcut().isEmpty()) return true;
+    return false;
+  }
+};
+
 //-----------------------------------------------------------------------------
 
 static void fatalError(QString msg) {
@@ -369,6 +418,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   QApplication a(argc, argv);
+  a.installEventFilter(new MenuShortcutGapFilter(&a));
 
 #ifdef MACOSX
   // This workaround is to avoid missing left button problem on Qt5.6.0.
