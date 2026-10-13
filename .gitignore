@@ -13,6 +13,8 @@ Thumbs.db
 
 # bundled thirdparty libraries
 /thirdparty/boost
+/thirdparty/qt
+/thirdparty/opencv
 /thirdparty/libjpeg-turbo64
 /thirdparty/lzo
 /thirdparty/tiff-4.2.0
