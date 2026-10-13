@@ -9,7 +9,8 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Current status
 
-- **Phase:** 3, Docking ([docs/phases/03-docking.md](docs/phases/03-docking.md)), on branch `feature/03-docking`. Floating panels are now kept on screen (`828bc7a35`) and `Esc` closes them. Phase 2 is done and merged (`2f4946b0d`). Phase 1 is paused.
+- **Phase:** 4, Timeline ([docs/phases/04-timeline.md](docs/phases/04-timeline.md)), on branch `feature/04-timeline`. 4.1 (data flow), 4.2a (themeable keyframe colours, `b7823b59c`), 4.3a (visible keyframe box selection, `e78a5f2d4`) and 4.5a paint timing baseline (`2d3fcd818`) are done. 4.5b simple-view paint optimisation is in progress.
+- Phases 1 and 3 are paused but merged into dev (`de1de51b6`). Phase 2 is done.
 - The owner asked to skip DPI and scaling checks from now on: test at 1.0 only.
 - **State:** 1.1 and 1.2 are done. 1.3 (icons) was deferred by the owner; Phosphor is chosen for later. 1.4 is done. The step 1 rename to SpeedToon2D is done (`1017990f5`).
 - Phase 0 is merged into `dev/ui-modernization` (`896d35abe`). The test scene is deferred.
@@ -50,10 +51,11 @@ Licence: BSD-3 ([LICENSE.txt](LICENSE.txt)). Mission and rules: [AGENTS.md](AGEN
 
 ## Next actions
 
-1. Rename step 2: CMake target and exe `SpeedToon2D.exe`, xdg and macOS packaging (ADR 0003).
-2. Task 1.5: visual review of the dialogs, schematic and function editor. The scripted capture approach is described in the 1.4 log.
-3. Task 1.5: visual review of the dialogs, Preferences, schematic and function editor. This needs GUI interaction.
-4. Owner: create the baseline test scene (TESTING.md).
+1. Phase 4.5: commit the simple-view paint optimisation after final review, then decide whether another paint hotspot is needed.
+2. Rename step 2: CMake target and exe `SpeedToon2D.exe`, xdg and macOS packaging (ADR 0003).
+3. Task 1.5: visual review of the dialogs, schematic and function editor. The scripted capture approach is described in the 1.4 log.
+4. Task 1.5: visual review of the dialogs, Preferences, schematic and function editor. This needs GUI interaction.
+5. Owner: create the baseline test scene (TESTING.md).
 
 ## Last verified state
 

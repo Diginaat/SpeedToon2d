@@ -2360,6 +2360,8 @@ XsheetViewer {
   qproperty-SelectedColumnHead: rgba(243, 223, 235, 0.3);
   qproperty-PlayRangeColor: #808080;
   qproperty-KeyframeLineColor: #000;
+  qproperty-KeyframeColor: #fff;
+  qproperty-SelectedKeyframeColor: #559dff;
   qproperty-LevelEndColor: #000;
   qproperty-FoldedColumnBGColor: #9a9a9a;
   qproperty-FoldedColumnLineColor: #737373;

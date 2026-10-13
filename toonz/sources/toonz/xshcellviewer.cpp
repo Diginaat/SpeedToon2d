@@ -79,6 +79,9 @@
 #include <QClipboard>
 #include <QKeyEvent>
 #include <QBuffer>
+#include <QElapsedTimer>
+#include <QFile>
+#include <QTextStream>
 
 namespace {
 
@@ -2462,27 +2465,6 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
 
   drawLoopFrameMarker(p, row, col);
 
-  QRect nameRect = o->rect(PredefinedRect::CELL_NAME).translated(QPoint(x, y));
-
-  if (Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()) {
-    TStageObject *pegbar = xsh->getStageObject(m_viewer->getObjectId(col));
-    int r0, r1;
-    if (pegbar && pegbar->getKeyframeRange(r0, r1))
-      nameRect = o->rect(PredefinedRect::CELL_NAME_WITH_KEYFRAME)
-                     .translated(QPoint(x, y));
-  }
-
-  nameRect.adjust(0, 0, -frameAdj.x(), -frameAdj.y());
-
-  if (!Preferences::instance()->isShowDragBarsEnabled()) {
-    if (o->isVerticalTimeline())
-      nameRect.adjust(-3, 0, 0, 0);
-    else if (Preferences::instance()->getTimelineLayoutPreference() == "NoDragCompact")
-      nameRect.adjust(0, -1, -0, -1);
-    else if (Preferences::instance()->getTimelineLayoutPreference() == "Roomy")
-      nameRect.adjust(0, -3, -0, -3);
-  }
-
   // draw text in red if the file does not exist
   bool isRed          = false;
   TXshSimpleLevel *sl = cell.getSimpleLevel();
@@ -2499,23 +2481,41 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
   if (isLoopedCell && row > loopR1) penColor.setAlphaF(0.4);
   p.setPen(penColor);
 
-/*
-  QString fontName = Preferences::instance()->getInterfaceFont();
-  if (fontName == "") {
-#ifdef _WIN32
-    fontName = "Arial";
-#else
-    fontName = "Helvetica";
-#endif
-  }
-  static QFont font(fontName, -1, QFont::Normal);
-  */
-  QFont font = p.font();
-  font.setPixelSize(XSHEET_FONT_PX_SIZE);
-  p.setFont(font);
-
   // do not draw frame number under RenameCellField
   if (m_renameCell->isVisible() && m_renameCell->isLocatedAt(row, col)) return;
+
+  QRect nameRect;
+  QFont font;
+  bool textLayoutReady = false;
+  auto setupTextLayout = [&]() {
+    if (textLayoutReady) return;
+    nameRect = o->rect(PredefinedRect::CELL_NAME).translated(QPoint(x, y));
+
+    if (Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()) {
+      TStageObject *pegbar = xsh->getStageObject(m_viewer->getObjectId(col));
+      int r0, r1;
+      if (pegbar && pegbar->getKeyframeRange(r0, r1))
+        nameRect = o->rect(PredefinedRect::CELL_NAME_WITH_KEYFRAME)
+                       .translated(QPoint(x, y));
+    }
+
+    nameRect.adjust(0, 0, -frameAdj.x(), -frameAdj.y());
+
+    if (!Preferences::instance()->isShowDragBarsEnabled()) {
+      if (o->isVerticalTimeline())
+        nameRect.adjust(-3, 0, 0, 0);
+      else if (Preferences::instance()->getTimelineLayoutPreference() ==
+               "NoDragCompact")
+        nameRect.adjust(0, -1, -0, -1);
+      else if (Preferences::instance()->getTimelineLayoutPreference() == "Roomy")
+        nameRect.adjust(0, -3, -0, -3);
+    }
+
+    font = p.font();
+    font.setPixelSize(XSHEET_FONT_PX_SIZE);
+    p.setFont(font);
+    textLayoutReady = true;
+  };
 
   // if the same level & same fId with the previous cell,
   // draw continue line
@@ -2558,6 +2558,8 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
       return;
     }
 
+    setupTextLayout();
+
     TFrameId fid = cell.m_frameId;
 
     // convert the last one digit of the frame number to alphabet
@@ -2596,6 +2598,8 @@ void CellArea::drawLevelCell(QPainter &p, int row, int col, bool isReference,
        (isAfterMarkers && !isSimpleView &&
         Preferences::instance()->isLevelNameOnEachMarkerEnabled()) ||
        prevCell.getFrameId().isStopFrame())) {
+    setupTextLayout();
+
     std::wstring levelName = cell.m_level->getName();
     QString text           = QString::fromStdWString(levelName);
     QFontMetrics fm(font);
@@ -3471,7 +3475,7 @@ void CellArea::drawKeyframe(QPainter &p, const QRect toBeUpdated) {
   const Orientation *o = m_viewer->orientation();
   int r0, r1, c0, c1;  // range of visible rows and columns
   CellRange visible    = m_viewer->xyRectToRange(toBeUpdated);
-  QColor keyFrameColor = Qt::white, outline = Qt::black;
+  QColor keyFrameColor = m_viewer->getKeyframeColor(), outline = Qt::black;
   r0 = visible.from().frame();
   r1 = visible.to().frame();
   c0 = visible.from().layer();
@@ -3572,10 +3576,10 @@ void CellArea::drawKeyframe(QPainter &p, const QRect toBeUpdated) {
         QPoint xy     = m_viewer->positionToXY(CellPosition(row, col));
         QPoint target = tmpKeyRect.translated(xy).topLeft();
 
-        QColor color  = Qt::white;
+        QColor color  = keyFrameColor;
         if (m_viewer->getKeyframeSelection() &&
             m_viewer->getKeyframeSelection()->isSelected(row, col))
-          color = QColor(85, 157, 255);
+          color = m_viewer->getSelectedKeyframeColor();
 
         int x = xy.x();
         int y = xy.y();
@@ -3772,7 +3776,38 @@ bool CellArea::getEaseHandles(int r0, int r1, double e0, double e1, int &rh0,
 }
 
 //-----------------------------------------------------------------------------
+namespace {
+// Optional timing for timeline performance work (docs/phases/04-timeline.md,
+// task 4.5). When the environment variable SPEEDTOON2D_TIMELINE_PAINT_LOG
+// names a file, every cell area repaint appends "<microseconds> <w>x<h>".
+class PaintTimer {
+public:
+  explicit PaintTimer(const QRect &rect) : m_rect(rect) {
+    if (!logPath().isEmpty()) m_timer.start();
+  }
+  ~PaintTimer() {
+    if (!m_timer.isValid()) return;
+    qint64 micros = m_timer.nsecsElapsed() / 1000;
+    QFile file(logPath());
+    if (file.open(QIODevice::Append | QIODevice::Text))
+      QTextStream(&file) << micros << ' ' << m_rect.width() << 'x'
+                         << m_rect.height() << '\n';
+  }
+
+private:
+  static const QString &logPath() {
+    static const QString path =
+        qEnvironmentVariable("SPEEDTOON2D_TIMELINE_PAINT_LOG");
+    return path;
+  }
+  QElapsedTimer m_timer;
+  QRect m_rect;
+};
+}  // namespace
+
 void CellArea::paintEvent(QPaintEvent *event) {
+  // Declared first so it also measures the painter flush at the end
+  PaintTimer paintTimer(event->rect());
   QRect toBeUpdated = event->rect();
 
   QPainter p(this);

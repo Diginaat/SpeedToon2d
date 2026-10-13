@@ -2,6 +2,30 @@
 
 _Rewrite this file at the end of every session._
 
+## Session 2026-10-14 (9): Phase 4 simple-view paint optimisation
+
+- Current dirty work in `toonz/sources/toonz/xshcellviewer.cpp`: `drawLevelCell` skips text-rectangle/font setup for zoomed-out simple-view marker cells.
+- Build completed after stale `Tahoma2D.exe` processes blocked linking; renamed the locked old exe to `Tahoma2D.locktest.exe`, rebuilt, then removed the renamed file.
+- Benchmark after change on `perf_timeline_50x300.tnz` with `-StepCount 120`: 100 full-area samples, mean 2.19 ms, median 2.12 ms, p95 2.71 ms, max 2.98 ms. Baseline was p95 3.04 ms.
+- **Exact next action:** review diff, optionally run one visual smoke test in the timeline, then commit this as 4.5b.
+
+## Session 2026-10-14 (8): Phase 4 paint baseline tooling
+
+- Continued Phase 4 on `feature/04-timeline`.
+- Current dirty work adds opt-in `SPEEDTOON2D_TIMELINE_PAINT_LOG` timing in `CellArea::paintEvent` and benchmark helpers in `test-scenes/tools/`.
+- Build completed: `cmake --build toonz/build --config RelWithDebInfo --parallel` rebuilt `Tahoma2D.exe`.
+- The first generated 50x2000 scene referenced missing `+drawings\perf.pli` files; the generator now writes real 1x1 raster frames and uses `perf_timeline_50x300.tnz`.
+- Baseline benchmark on `toonz/build/RelWithDebInfo/tahomastuff/sandbox/scenes/perf_timeline_50x300.tnz`: 90 full-area samples, mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms. Numbers are in `docs/phases/04-timeline.md`.
+- **Exact next action:** compare any timeline paint changes against this baseline, or commit the tooling first as 4.5a.
+
+## Session 2026-10-14 (7): Phase 4 timeline start
+
+- The owner said "go to phase 4". Phase 3 is paused and merged (`de1de51b6`). Branch: `feature/04-timeline`.
+- 4.1 data-flow table and 4.2a themeable keyframe colours (`b7823b59c`). See `docs/phases/04-timeline.md`.
+- **Test trick:** in the Modern Animation room at 1.0, click the viewer's diamond button at (347,728) to set a key on Col1 at frame 1. The key icon is then at (355,860) in the timeline.
+- 4.3 audit: most keyframe interactions already exist (see the phase doc). 4.3a made the box-selection rectangle visible (`e78a5f2d4`).
+- **Exact next action:** decide with the owner whether box selection should start from empty space in the key strip (design question). Otherwise do 4.4 playback or a 4.5 performance baseline.
+
 ## Session 2026-10-13 (6): Phase 3 docking start
 
 - Merged Phase 2 into dev (`2f4946b0d`). Branch: `feature/03-docking`. `Default` stays the default room preset, because the owner has not decided.

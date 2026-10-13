@@ -1,6 +1,6 @@
 # Phase 4 — Horizontal timeline and keyframes
 
-- **Status:** not started. This phase needs owner approval before it begins.
+- **Status:** in progress (approved 2026-10-14). Phase 3 was paused to start it.
 - **Branch:** `feature/04-timeline`
 
 ## Goal
@@ -18,11 +18,11 @@ Make the Timeline professional, with clearer keyframe editing. Keep exposure and
 
 Split each task into commits small enough to build and test on their own. Tick a task only after it has been verified.
 
-- [ ] 4.1 Document the data flow: exposures compared with keyframes, selection, undo.
+- [x] 4.1 Document the data flow: exposures compared with keyframes, selection, undo.
 - [ ] 4.2 Appearance: ruler, keyframe glyphs, selection, row spacing, grid contrast, zoom and playhead.
-- [ ] 4.3 Keyframe interactions: multi-select, box select, move, copy and paste, keyboard navigation, context menus.
+- [ ] 4.3 (in progress) Keyframe interactions: multi-select, box select, move, copy and paste, keyboard navigation, context menus.
 - [ ] 4.4 Playback: scrubbing, frame range display, onion-skin visibility.
-- [ ] 4.5 Performance: measure painting on a large scene before and after.
+- [ ] 4.5 (in progress) Performance: measure painting on a large scene before and after.
 
 ## Acceptance criteria
 
@@ -32,4 +32,53 @@ Split each task into commits small enough to build and test on their own. Tick a
 
 ## Log
 
-_No entries yet._
+### 4.1 Data flow
+There are two different kinds of timeline data. Never mix them up:
+
+| Data | Model | Timeline UI | Copy, paste and undo |
+|---|---|---|---|
+| **Drawing exposures** (which drawing shows on which frame) | `TXshCell` in `TXshColumn` (`toonz/sources/toonzlib/txshcell.cpp`, `txsheet.cpp`) | `CellArea::drawLevelCell` and related (`toonz/sources/toonz/xshcellviewer.cpp`). Selection: `TCellSelection`. Dragging: `xshcellmover.cpp` and `xsheetdragtool.cpp` | `celldata.cpp`, `cellselectioncommand.cpp` |
+| **Property keyframes** (position, rotation, scale and so on of a column or pegbar) | `TStageObject` channels, which are `TDoubleParam` keyframes (`toonz/sources/include/toonz/tstageobject.h`: `isKeyframe`, `getKeyframeRange`, `getKeyframeSpan`, `setKeyframeWithoutUndo`) | `CellArea::drawKeyframe` and `drawKeyframeLine` draw the diamonds, the interpolation lines, ease handles and the cycle toggle. Selection: `TKeyframeSelection` (`keyframeselection.cpp`). Dragging: `KeyframeMover` and `KeyframeMoverTool` (`keyframemover.cpp`) | `TKeyframeData` (MIME data). `PasteKeyframesUndo`, `DeleteKeyframesUndo` and `ShiftKeyframesUndo` are in `keyframeselection.cpp`; `UndoMoveKeyFrame` is in `keyframemover.cpp` |
+
+- `TCellKeyframeSelection` combines both for mixed selections.
+- The viewer's diamond button (`ViewerKeyframeNavigator`, `toonz/sources/include/toonzqt/keyframenavigator.h`) sets or removes a key on the current object at the current frame.
+- The Xsheet and the Timeline are the same `XsheetViewer`. All geometry comes from `Orientation` (`toonz/sources/toonzlib/orientation.cpp`): `PredefinedRect::KEY_ICON`, `FRAME_MARKER_AREA` and so on. Horizontal-only tweaks are spread through the paint code as `!o->isVerticalTimeline()` adjustments, which also depend on the *Timeline layout* preference (`NoDragMinimum`, `Roomy`).
+- Colours come from about 120 `XsheetViewer` Q_PROPERTYs set by QSS (`stuff/config/qss/Medium/less/layouts/xsheet.less`). Some colours were still hard-coded in C++. See 4.2a.
+
+### 4.2a Themeable keyframe colours (`b7823b59c`)
+- Keyframe diamonds and ease handles were hard-coded `Qt::white`, and selected keyframes were `QColor(85,157,255)`. Two new properties replace them: `XsheetViewer::KeyframeColor` and `SelectedKeyframeColor` (LESS `@xsheet-Keyframe-color` and `@xsheet-SelectedKeyframe-color`).
+- The defaults equal the old values, so each existing theme's QSS gains only those two lines with identical colours. Modern uses `@modern-accent-line` for selected keyframes.
+- **Test (1.0, Modern):** the viewer's diamond button set a key on Col1 at frame 1, which showed as a white diamond ([img](img/04-key-unselected.png)). Clicking it selected it, and it turned blue `#4a8fe7` ([img](img/04-key-selected.png)).
+- **Not tested:** the ease handles. They need a two-key segment with easing.
+
+### 4.3 Keyframe interactions: what already exists
+- **Selection:** click selects a key. Ctrl+click toggles and Shift+click extends (`KeyframeMoverTool::onClick`, `keyframemover.cpp`).
+- **Box selection:** press on an unselected key and drag (`rectSelect`). It only starts *on a key*; pressing on empty space selects cells instead.
+- **Moving:** drag a selected key to move it. Ctrl copies, Shift inserts and Alt overwrites (`KeyframeMover` qualifiers). Undo is `UndoMoveKeyFrame`.
+- **Ease handles:** drag the triangles (`makeKeyFrameHandleMoverTool`).
+- **Combined cell and key selection:** Alt+drag on cells, or Ctrl+drag with drag bars enabled (`TCellKeyframeSelection`).
+- **Navigation:** Next/Previous Key on Ctrl+. and Ctrl+, (`MI_NextKeyframe`, `MI_PrevKeyframe`). The context menu includes invert selection, among other options.
+
+### 4.3a Visible box selection (`e78a5f2d4`)
+- `KeyframeMoverTool::drawCellsArea` drew a black dashed rectangle, which was almost invisible on dark timelines. It now uses `SelectedKeyframeColor` with a 40/255 fill, and the rectangle is normalised.
+- **Test (1.0, Modern):** set a key, press on it, then drag right across frames 1-5. A blue dashed box with a light fill is visible ([img](img/04-key-box-select.png)).
+- **Possible follow-up:** start a box selection from empty space in the key strip, as in Harmony. This conflicts with cell selection in the same area, so it needs a design decision, for example a modifier key.
+
+### Still hard-coded in `drawKeyframe` (candidates for later)
+- The keyframe outline (`Qt::black`).
+- The cycle-toggle button, drawn with white and black primitives.
+- The sound and other column painters, not yet audited.
+
+### 4.5a Timeline paint baseline tooling
+- `CellArea::paintEvent` now has opt-in paint timing behind the `SPEEDTOON2D_TIMELINE_PAINT_LOG` environment variable. When unset, it does not start the timer or write files.
+- The log format is one repaint per line: `<microseconds> <width>x<height>`.
+- Added `test-scenes/tools/make_perf_scene.toonzscript` for a large 50-column, 300-frame scene, `timeline_bench.ps1` to launch the app with logging, and `paint_stats.py` to summarise the log.
+- `timeline_bench.ps1` defaults to the current `Tahoma2D.exe` name, validates paths, supports `-IncludeLoadPaints` for scene-open repaint baselines, supports `-StepCount` for deterministic frame-step repaint samples, and re-activates the app during step runs so key presses reach the timeline.
+- **Build:** `cmake --build toonz/build --config RelWithDebInfo --parallel` completed and rebuilt `Tahoma2D.exe`.
+- **Baseline (1.0, sandbox perf scene):** `timeline_bench.ps1 -StepCount 120` on `perf_timeline_50x300.tnz` wrote 90 full-cell-area repaint samples: mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms.
+- **Caveat:** `perf_timeline_50x2000.tnz` was too large for the current script path and initially produced invalid missing-level scenes; the generator now writes real 1x1 raster drawings and uses `perf_timeline_50x300.tnz`.
+
+### 4.5b Simple-view paint optimisation
+- `drawLevelCell` now avoids building the text rectangle and changing the painter font when a zoomed-out simple-view cell only draws the small frame marker. Level names still build the same rectangle and font before drawing text.
+- **Build:** `cmake --build toonz/build --config RelWithDebInfo --parallel` completed after closing stale benchmark processes. Existing C4251 warnings remained; no new compile errors.
+- **Benchmark (1.0, same `perf_timeline_50x300.tnz`, `-StepCount 120`):** before 90 samples, mean 2.41 ms, median 2.28 ms, p95 3.04 ms, max 3.62 ms; after 100 samples, mean 2.19 ms, median 2.12 ms, p95 2.71 ms, max 2.98 ms.

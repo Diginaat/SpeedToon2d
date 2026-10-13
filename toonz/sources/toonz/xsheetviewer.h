@@ -221,6 +221,8 @@ class XsheetViewer final : public QFrame, public SaveLoadQSettings {
   QColor m_selectedTextColor;        // text color for the selected cells
   QColor m_frameTextColor;           // text color for frame numbers
   QColor m_keyframeLineColor;        // color of keyframe lines
+  QColor m_keyframeColor         = Qt::white;  // keyframe icons, ease handles
+  QColor m_selectedKeyframeColor = QColor(85, 157, 255);  // selected keyframes
   QColor m_currentFrameTextColor;    // text color for the current frame row
   QColor m_previewFrameTextColor;    // frame number in preview range (blue)
   QColor m_onionSkinAreaBgColor;
@@ -248,6 +250,10 @@ class XsheetViewer final : public QFrame, public SaveLoadQSettings {
                  setFrameTextColor)
   Q_PROPERTY(QColor KeyframeLineColor READ getKeyframeLineColor WRITE
                  setKeyframeLineColor)
+  Q_PROPERTY(
+      QColor KeyframeColor READ getKeyframeColor WRITE setKeyframeColor)
+  Q_PROPERTY(QColor SelectedKeyframeColor READ getSelectedKeyframeColor WRITE
+                 setSelectedKeyframeColor)
   Q_PROPERTY(QColor PreviewFrameTextColor READ getPreviewFrameTextColor WRITE
                  setPreviewFrameTextColor)
   Q_PROPERTY(QColor OnionSkinAreaBgColor READ getOnionSkinAreaBgColor WRITE
@@ -882,6 +888,12 @@ public:
   QColor getKeyframeLineColor() const { return m_keyframeLineColor; }
   void setKeyframeLineColor(const QColor &color) {
     m_keyframeLineColor = color;
+  }
+  QColor getKeyframeColor() const { return m_keyframeColor; }
+  void setKeyframeColor(const QColor &color) { m_keyframeColor = color; }
+  QColor getSelectedKeyframeColor() const { return m_selectedKeyframeColor; }
+  void setSelectedKeyframeColor(const QColor &color) {
+    m_selectedKeyframeColor = color;
   }
   QColor getCurrentFrameTextColor() const { return m_currentFrameTextColor; }
   void setPreviewFrameTextColor(const QColor &color) {
